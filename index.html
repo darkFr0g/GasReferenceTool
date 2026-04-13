@@ -37,8 +37,6 @@
 html,body { height:100%; }
 
 html {
-  /* Prevent iOS bounce on the whole page */
-  overflow: hidden;
   height: 100%;
 }
 body {
@@ -48,12 +46,18 @@ body {
   font-size: 14px;
   line-height: 1.5;
   height: 100%;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
+
+/* ── STICKY WRAPPER ── */
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 /* ── SITE NAV ── */
-.sitenav{background:#07090f;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:4px;padding:0 16px;height:38px;overflow-x:auto;flex-shrink:0;position:sticky;top:0;z-index:101;-webkit-overflow-scrolling:touch;}
+.sitenav{background:#07090f;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:4px;padding:0 16px;height:38px;overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch;}
 .sitenav::-webkit-scrollbar{display:none;}
 .sitenav a{color:var(--muted);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 10px;height:38px;display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.15s;}
 .sitenav a:hover{color:var(--text);}
@@ -69,9 +73,6 @@ body {
   align-items: center;
   gap: 12px;
   height: 52px;
-  position: sticky;
-  top: 38px;
-  z-index: 100;
 }
 
 /* ── CONTROLS ── */
@@ -82,9 +83,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  position: sticky;
-  top: 90px;
-  z-index: 99;
 }
 
 .logo {
@@ -551,6 +549,7 @@ body {
 </head>
 <body>
 
+<div class="sticky-top">
 <nav class="sitenav">
   <a href="index.html" class="active">⚒ Item Search</a>
   <div class="nav-divider"></div>
@@ -591,6 +590,7 @@ body {
     <button class="fpill" data-cat="electric">Electric</button>
   </div>
 </div>
+</div><!-- /sticky-top -->
 
 <div class="main">
   <div id="itemsGrid"></div>
