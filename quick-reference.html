@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Reference Guide — XCMG Gas</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root {
+  --bg:#0f1117;--surface:#181b23;--panel:#1e2130;--border:#2a2e3d;
+  --border2:#363b50;--text:#e8eaf0;--muted:#7b82a0;--dim:#4a5068;
+  --coned:#4ab3e8;
+  --c-main:#6c8fff;--c-leak:#ff5f5f;--c-excavation:#f0a030;
+  --c-restoration:#48c98e;--c-electric:#b07aff;--c-misc:#7b8ab0;--c-common:#ffd04b;
+  --radius:6px;--font:-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:"SF Mono","Cascadia Code","Consolas",monospace;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;}
+.sitenav{background:#07090f;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:4px;padding:0 16px;height:38px;overflow-x:auto;}
+.sitenav a{color:var(--muted);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 10px;height:38px;display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.15s;}
+.sitenav a:hover{color:var(--text);}
+.sitenav a.active{color:var(--coned);border-bottom-color:var(--coned);}
+.nav-divider{width:1px;height:18px;background:var(--border2);flex-shrink:0;margin:0 4px;}
+.header{background:#0a0c12;border-bottom:2px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:12px;height:52px;}
+.logo{background:var(--coned);color:#000;font-weight:800;font-size:13px;letter-spacing:2px;padding:5px 10px;border-radius:3px;flex-shrink:0;}
+.header-title{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);opacity:.9;}
+.main{padding:16px;max-width:1400px;margin:0 auto;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+.gap{margin-top:14px;}
+.panel{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.ph{background:var(--panel);padding:9px 14px;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.ph .dot{width:3px;height:14px;border-radius:2px;flex-shrink:0;}
+.rt{width:100%;border-collapse:collapse;}
+.rt th{background:rgba(255,255,255,0.03);color:var(--dim);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:7px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.rt td{padding:8px 12px;font-size:13px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:middle;}
+.rt tr:last-child td{border-bottom:none;}
+.rt tr:hover td{background:rgba(255,255,255,0.02);}
+.rt td.lbl{color:var(--text);font-weight:600;white-space:nowrap;}
+.rt td.val{color:#fff;font-weight:700;font-family:var(--mono);}
+.rt td.code{font-family:var(--mono);font-size:12.5px;color:var(--text);font-weight:700;white-space:nowrap;}
+.warn{color:var(--c-leak)!important;font-weight:700!important;}
+.gold{color:var(--c-common)!important;font-weight:700!important;}
+.green{color:var(--c-restoration)!important;font-weight:700!important;}
+.conv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);}
+.cc{background:var(--surface);padding:9px 12px;display:flex;justify-content:space-between;align-items:center;}
+.ci{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text);}
+.cf{font-family:var(--mono);font-size:13px;color:var(--coned);}
+.pb{display:inline-block;padding:2px 7px;border-radius:3px;font-size:11px;font-weight:700;font-family:var(--mono);margin-right:4px;}
+.lp{background:rgba(72,201,142,0.15);color:var(--c-restoration);}
+.ip{background:rgba(74,179,232,0.15);color:var(--coned);}
+.mp{background:rgba(108,143,255,0.15);color:var(--c-main);}
+.hp{background:rgba(240,160,48,0.15);color:var(--c-excavation);}
+.xhp{background:rgba(255,95,95,0.15);color:var(--c-leak);}
+@media(max-width:600px){.grid{grid-template-columns:1fr;}.conv-grid{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:900px){.main{padding:16px 24px;}}
+</style>
+</head>
+<body>
+
+<nav class="sitenav">
+  <a href="index.html">⚒ Item Search</a>
+  <div class="nav-divider"></div>
+  <a href="quick-reference.html" class="active">📋 Quick Reference</a>
+</nav>
+
+<header class="header">
+  <div class="logo">XCMG</div>
+  <div class="header-title">Quick Reference Guide</div>
+</header>
+
+<div class="main">
+
+  <!-- ROW 1 -->
+  <div class="grid">
+
+    <!-- STIP SCHEDULE -->
+    <div class="panel">
+      <div class="ph"><div class="dot" style="background:var(--c-common)"></div>Contractor Payment Stipulation Schedule</div>
+      <table class="rt">
+        <thead><tr><th>Time Window</th><th>CAC</th><th>EJ</th><th>Donofrio</th><th>Gianfia</th></tr></thead>
+        <tbody>
+          <tr><td class="lbl">7am – 6pm</td><td class="val green">1.0</td><td class="val green">1.0</td><td class="val green">1.0</td><td class="val green">1.0</td></tr>
+          <tr><td class="lbl">9am – 2pm</td><td class="val">1.3</td><td class="val">1.3</td><td class="val">1.3</td><td class="val">1.3</td></tr>
+          <tr><td class="lbl">9am – 3pm</td><td class="val">1.2</td><td class="val">1.2</td><td class="val">1.2</td><td class="val">1.2</td></tr>
+          <tr><td class="lbl">9am – 4pm</td><td class="val">1.1</td><td class="val">1.1</td><td class="val">1.15</td><td class="val">1.1</td></tr>
+          <tr><td class="lbl">10am – 2pm</td><td class="val warn">1.5</td><td class="val warn">1.4</td><td class="val warn">1.4</td><td class="val warn">1.4</td></tr>
+          <tr><td class="lbl">10am – 3pm</td><td class="val">1.3</td><td class="val">1.3</td><td class="val">1.3</td><td class="val">1.3</td></tr>
+        </tbody>
+      </table>
+      <div style="padding:8px 12px;font-size:11.5px;border-top:1px solid var(--border);line-height:1.8;">
+        <div class="gold">★ T&amp;E (T350) / Premium Time — always billed at stip factor of 1.0</div>
+        <div class="gold">★ Rock removal / Other HVI — photo with placard REQUIRED</div>
+        <div class="warn">⚠ Pneumatic tool inside trench requires CCI approval</div>
+      </div>
+    </div>
+
+    <!-- GAS MAIN VALVES -->
+    <div class="panel">
+      <div class="ph"><div class="dot" style="background:var(--c-main)"></div>Gas Main Valves (PE)</div>
+      <table class="rt">
+        <thead><tr><th>Valve Size</th><th>Turns to Close</th></tr></thead>
+        <tbody>
+          <tr><td class="lbl">4"</td><td class="val">¼ turn</td></tr>
+          <tr><td class="lbl">6"</td><td class="val">¼ turn</td></tr>
+          <tr><td class="lbl">8"</td><td class="val">¼ turn</td></tr>
+          <tr><td class="lbl">12"</td><td class="val">1½ turns</td></tr>
+          <tr><td class="lbl">16"</td><td class="val warn">22½ turns</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PRESSURE TESTING -->
+    <div class="panel">
+      <div class="ph"><div class="dot" style="background:var(--c-excavation)"></div>Pressure Testing Guidelines</div>
+      <table class="rt">
+        <thead><tr><th>Item</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td class="lbl">Low / Mid Pressure</td><td class="val green">Up to 90 PSIG</td></tr>
+          <tr><td class="lbl">High Pressure</td><td class="val warn">150 PSIG</td></tr>
+          <tr><td class="lbl" style="padding-left:20px;color:var(--dim);font-size:12px;font-weight:400;">Mains ≤1,000 ft</td><td class="val">1 Hour</td></tr>
+          <tr><td class="lbl" style="padding-left:20px;color:var(--dim);font-size:12px;font-weight:400;">Mains &gt;1,000 ft</td><td class="val">2 Hours</td></tr>
+          <tr><td colspan="2" style="text-align:center;font-weight:700;font-size:12px;letter-spacing:1px;" class="gold">★ Leave 20–22 PSIG after test</td></tr>
+          <tr><td class="lbl" style="padding-left:20px;color:var(--dim);font-size:12px;font-weight:400;">Services ≤2" dia.</td><td class="val">15 Minutes</td></tr>
+          <tr><td class="lbl" style="padding-left:20px;color:var(--dim);font-size:12px;font-weight:400;">Services &gt;2" dia.</td><td class="val">30 Minutes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ROW 2 -->
+  <div class="grid gap">
+
+    <!-- PRESSURE CLASSES -->
+    <div class="panel">
+      <div class="ph"><div class="dot" style="background:var(--c-leak)"></div>Main Pressure Guidelines</div>
+      <table class="rt">
+        <thead><tr><th>Class</th><th>Range</th></tr></thead>
+        <tbody>
+          <tr><td class="lbl"><span class="pb lp">LP</span> Low Pressure</td><td class="val">4" – 12" WC</td></tr>
+          <tr><td class="lbl"><span class="pb ip">IP</span> Intermediate Pressure</td><td class="val">1 – 5 PSIG</td></tr>
+          <tr><td class="lbl"><span class="pb mp">MP</span> Medium Pressure</td><td class="val">2 – 15 PSIG</td></tr>
+          <tr><td class="lbl"><span class="pb hp">HP</span> High Pressure</td><td class="val">15 – 99 PSIG</td></tr>
+          <tr><td class="lbl"><span class="pb xhp">XHP</span> Extra High Pressure</td><td class="val">125 – 350 PSIG</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CONVERSION -->
+    <div class="panel">
+      <div class="ph"><div class="dot" style="background:var(--c-misc)"></div>Conversion — Inches to Feet</div>
+      <div class="conv-grid">
+        <div class="cc"><span class="ci">1"</span><span class="cf">0.1'</span></div>
+        <div class="cc"><span class="ci">2"</span><span class="cf">0.2'</span></div>
+        <div class="cc"><span class="ci">3"</span><span class="cf">0.3'</span></div>
+        <div class="cc"><span class="ci">4"</span><span class="cf">0.3'</span></div>
+        <div class="cc"><span class="ci">5"</span><span class="cf">0.4'</span></div>
+        <div class="cc"><span class="ci">6"</span><span class="cf">0.5'</span></div>
+        <div class="cc"><span class="ci">7"</span><span class="cf">0.6'</span></div>
+        <div class="cc"><span class="ci">8"</span><span class="cf">0.7'</span></div>
+        <div class="cc"><span class="ci">9"</span><span class="cf">0.8'</span></div>
+        <div class="cc"><span class="ci">10"</span><span class="cf">0.8'</span></div>
+        <div class="cc"><span class="ci">11"</span><span class="cf">0.9'</span></div>
+        <div class="cc"><span class="ci">12"</span><span class="cf">1.0'</span></div>
+      </div>
+    </div>
+
+    <!-- UG CLEARANCES -->
+    <div class="panel">
+      <div class="ph"><div class="dot" style="background:var(--c-electric)"></div>Underground Facilities Clearances</div>
+      <table class="rt">
+        <thead><tr><th>UG Facility</th><th>Gas Svc</th><th>Gas Main</th><th>XHP Main</th><th>Min w/ Phenolic</th></tr></thead>
+        <tbody>
+          <tr><td class="lbl">Electrical Ducts</td><td class="val">6"</td><td class="val">6"</td><td class="val">12"</td><td class="val">2"</td></tr>
+          <tr><td class="lbl">URD Cable</td><td class="val">12"</td><td class="val">12"</td><td class="val">12"</td><td class="val">2"</td></tr>
+          <tr><td class="lbl">Oil-O Static</td><td class="val">12"</td><td class="val">12"</td><td class="val">12"</td><td class="val">6"</td></tr>
+          <tr><td class="lbl gold">Steam* PE</td><td class="val warn">35'</td><td class="val warn">35'</td><td class="val" style="color:var(--dim)">—</td><td class="val warn">35'</td></tr>
+          <tr><td class="lbl gold">Steam* ST</td><td class="val warn">≥6"</td><td class="val warn">≥6"</td><td class="val" style="color:var(--dim)">—</td><td class="val warn">&lt;2"</td></tr>
+          <tr><td class="lbl">Water &amp; Sewer</td><td class="val">≥6"</td><td class="val">≥6"</td><td class="val" style="color:var(--dim)">—</td><td class="val">≥2"</td></tr>
+        </tbody>
+      </table>
+      <div style="padding:6px 12px;font-size:11px;color:var(--dim);border-top:1px solid var(--border);">* Steam rows — verify clearance with field engineer</div>
+    </div>
+
+  </div>
+
+  <!-- ROW 3: Commonly Used Items -->
+  <div class="gap">
+    <div class="panel">
+      <div class="ph"><div class="dot" style="background:var(--c-common)"></div>Commonly Used Items</div>
+      <table class="rt">
+        <thead><tr><th>Code</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="code">T43</td><td>Excavation and Backfill</td></tr>
+          <tr><td class="code">T2R</td><td>Roadway Top and Base (1 ft)</td></tr>
+          <tr><td class="code">T7</td><td>Sidewalk Excavation (× 0.33 ft)</td></tr>
+          <tr><td class="code">T7A</td><td>Sidewalk Restoration (× 0.33 ft)</td></tr>
+          <tr><td class="code">T7R</td><td>Sidewalk Excavation &amp; Restoration (× 0.33 ft)</td></tr>
+          <tr><td class="code">T101</td><td>Vertical Sheeting</td></tr>
+          <tr><td class="code">T101A</td><td>Lag Sheeting</td></tr>
+          <tr><td class="code">T350</td><td>T&amp;E — Time and Equipment</td></tr>
+          <tr><td class="code">GT61</td><td>Recess Plates</td></tr>
+          <tr><td class="code">T50, T51, T51H</td><td>Breaking Rock — All Methods / Splitting / Hoe Ram</td></tr>
+          <tr><td class="code">G26A–D</td><td>Pipe Including Excavation, Backfill &amp; Restoration</td></tr>
+          <tr><td class="code">G27A–D</td><td>Pipe Only</td></tr>
+          <tr><td class="code">GT18A–D</td><td>Main Cut-Out</td></tr>
+          <tr><td class="code">G18</td><td>Bypass</td></tr>
+          <tr><td class="code">GT19A–D</td><td>Main Extension</td></tr>
+          <tr><td class="code">GT42A–C</td><td>Main Offset</td></tr>
+          <tr><td class="code">GT31A–D</td><td>Service Transfer</td></tr>
+          <tr><td class="code">G1–5</td><td>Service Items</td></tr>
+          <tr><td class="code">GT200</td><td>All Inclusive Service Items under 50'</td></tr>
+          <tr><td class="code">G1AI / G1BI / G1CI / G1DI</td><td>Service Item (Linear Foot)</td></tr>
+          <tr><td class="code">G5AI / G5BI / G5CI</td><td>Pipe Installation on Open Excavation</td></tr>
+          <tr><td class="code">G3AI / G3BI / G3CI</td><td>Service Inserts</td></tr>
+          <tr><td class="code">G4JI / G4KI / G4LI</td><td>Partial Insert Items</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
