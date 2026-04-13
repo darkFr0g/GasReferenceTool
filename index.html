@@ -45,6 +45,13 @@ body {
   min-height: 100vh;
 }
 
+/* ── SITE NAV ── */
+.sitenav{background:#07090f;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:4px;padding:0 16px;height:38px;overflow-x:auto;flex-shrink:0;}
+.sitenav a{color:var(--muted);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 10px;height:38px;display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.15s;}
+.sitenav a:hover{color:var(--text);}
+.sitenav a.active{color:var(--coned);border-bottom-color:var(--coned);}
+.nav-divider{width:1px;height:18px;background:var(--border2);flex-shrink:0;margin:0 4px;}
+
 /* ── HEADER ── */
 .header {
   background: #0a0c12;
@@ -493,6 +500,16 @@ body {
 </style>
 </head>
 <body>
+
+<nav class="sitenav">
+  <a href="index.html" class="active">⚒ Item Search</a>
+  <div class="nav-divider"></div>
+  <a href="quick-reference.html">📋 Quick Reference</a>
+  <div class="nav-divider"></div>
+  <a href="work-area-protection.html">🚧 Work Area Protection</a>
+  <div class="nav-divider"></div>
+  <a href="field-guides.html">🔥⚡ Field Guides</a>
+</nav>
 
 <header class="header">
   <div class="logo">XCMG</div>
