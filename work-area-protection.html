@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work Area Protection — XCMG Gas</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root {
+  --bg:#0f1117; --surface:#181b23; --panel:#1e2130; --border:#2a2e3d;
+  --border2:#363b50; --text:#e8eaf0; --muted:#7b82a0; --dim:#4a5068;
+  --coned:#4ab3e8;
+  --c-service:#4ab3e8; --c-main:#6c8fff; --c-leak:#ff5f5f;
+  --c-excavation:#f0a030; --c-restoration:#48c98e; --c-sawcut:#d966d6;
+  --c-electric:#b07aff; --c-misc:#7b8ab0; --c-common:#ffd04b;
+  --radius:6px; --font:-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:"SF Mono","Cascadia Code","Consolas",monospace;
+}
+html,body{height:100%;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;}
+.sitenav{background:#07090f;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:4px;padding:0 16px;height:38px;overflow-x:auto;flex-shrink:0;}
+.sitenav a{color:var(--muted);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 10px;height:38px;display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.15s;}
+.sitenav a:hover{color:var(--text);}
+.sitenav a.active{color:var(--coned);border-bottom-color:var(--coned);}
+.nav-divider{width:1px;height:18px;background:var(--border2);flex-shrink:0;margin:0 4px;}
+.header{background:#0a0c12;border-bottom:2px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:12px;height:52px;}
+.logo{background:var(--coned);color:#000;font-weight:800;font-size:13px;letter-spacing:2px;padding:5px 10px;border-radius:3px;flex-shrink:0;}
+.header-title{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);opacity:.9;}
+.main{padding:16px;max-width:1400px;margin:0 auto;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
+.section-gap{margin-top:14px;}
+.panel{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.panel-header{background:var(--panel);padding:9px 14px;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.panel-header .accent{width:3px;height:14px;border-radius:2px;flex-shrink:0;}
+.panel-body{padding:0;}
+.ref-tbl{width:100%;border-collapse:collapse;}
+.ref-tbl th{background:rgba(255,255,255,0.03);color:var(--dim);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:7px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.ref-tbl td{padding:8px 12px;font-size:13px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;}
+.ref-tbl tr:last-child td{border-bottom:none;}
+.ref-tbl tr:hover td{background:rgba(255,255,255,0.02);}
+.ref-tbl td:first-child{color:var(--text);font-weight:600;white-space:nowrap;}
+.ref-tbl td.val{color:#fff;font-weight:700;}
+.ref-tbl td.warn{color:var(--c-leak)!important;font-weight:700!important;}
+.ref-tbl td.gold{color:var(--c-common)!important;font-weight:700!important;}
+.ref-tbl td.green{color:var(--c-restoration)!important;font-weight:700!important;}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--coned);color:#000;border-radius:50%;font-size:11px;font-weight:800;flex-shrink:0;margin-right:8px;}
+.step-row{display:flex;align-items:flex-start;padding:8px 12px;border-bottom:1px solid var(--border);gap:4px;}
+.step-row:last-child{border-bottom:none;}
+.step-row:hover{background:rgba(255,255,255,0.02);}
+.step-text{font-size:13px;color:var(--muted);flex:1;line-height:1.4;padding-top:2px;}
+.step-note{font-size:11px;color:var(--dim);margin-top:2px;}
+.warn-banner{background:rgba(255,95,95,0.08);border:1px solid rgba(255,95,95,0.2);border-radius:var(--radius);padding:10px 14px;margin-top:14px;font-size:13px;color:var(--c-leak);font-weight:600;display:flex;align-items:center;gap:8px;}
+@media(max-width:600px){.grid{grid-template-columns:1fr;}}
+@media(min-width:900px){.main{padding:16px 24px;}}
+</style>
+</head>
+<body>
+
+<nav class="sitenav">
+  <a href="index.html">⚒ Item Search</a>
+  <div class="nav-divider"></div>
+  <a href="quick-reference.html">📋 Quick Reference</a>
+  <div class="nav-divider"></div>
+  <a href="work-area-protection.html" class="active">🚧 Work Area Protection</a>
+  <div class="nav-divider"></div>
+  <a href="field-guides.html">🔥⚡ Field Guides</a>
+</nav>
+
+<header class="header">
+  <div class="logo">XCMG</div>
+  <div class="header-title">Work Area Protection — Quick Reference</div>
+</header>
+
+<div class="main">
+
+  <div class="grid">
+
+    <!-- SETUP SEQUENCE -->
+    <div class="panel">
+      <div class="panel-header"><div class="accent" style="background:var(--c-restoration)"></div>Setup Sequence</div>
+      <div class="panel-body">
+        <div class="step-row"><span class="step-num">1</span><div class="step-text">Wear PPE — traffic vest, hard hat</div></div>
+        <div class="step-row"><span class="step-num">2</span><div class="step-text">Activate dome light / flashers / arrow boards</div></div>
+        <div class="step-row"><span class="step-num">3</span><div class="step-text">Position vehicle <strong>UPSTREAM</strong> from work site</div></div>
+        <div class="step-row"><span class="step-num">4</span><div class="step-text">Flaggers to warn traffic (when necessary)</div></div>
+        <div class="step-row"><span class="step-num">5</span><div class="step-text"><strong>Place advance warning sign(s) FIRST</strong><div class="step-note">First device placed</div></div></div>
+        <div class="step-row"><span class="step-num">6</span><div class="step-text">Lay down cones / stanchions toward work site</div></div>
+        <div class="step-row"><span class="step-num">7</span><div class="step-text">Channel traffic using cones</div></div>
+        <div class="step-row"><span class="step-num">8</span><div class="step-text">Establish work site with barricades</div></div>
+        <div class="step-row"><span class="step-num">9</span><div class="step-text">Establish downstream termination with cones</div></div>
+        <div class="step-row"><span class="step-num">10</span><div class="step-text">Set up pedestrian channeling if needed<div class="step-note">Minimum 5 ft wide</div></div></div>
+      </div>
+    </div>
+
+    <!-- DEMOBILIZATION -->
+    <div class="panel">
+      <div class="panel-header"><div class="accent" style="background:var(--c-excavation)"></div>Demobilization Sequence</div>
+      <div class="panel-body">
+        <div class="step-row"><span class="step-num">1</span><div class="step-text">Wear PPE</div></div>
+        <div class="step-row"><span class="step-num">2</span><div class="step-text">Clean up work area</div></div>
+        <div class="step-row"><span class="step-num">3</span><div class="step-text">Break down work site</div></div>
+        <div class="step-row"><span class="step-num">4</span><div class="step-text"><strong>Pick up devices in REVERSE order</strong></div></div>
+        <div class="step-row"><span class="step-num">5</span><div class="step-text">Work back toward advance warning sign</div></div>
+        <div class="step-row"><span class="step-num">6</span><div class="step-text">Hazard lights on while leaving lanes</div></div>
+        <div class="step-row"><span class="step-num">7</span><div class="step-text">Wait for red light before pulling out</div></div>
+        <div class="step-row"><span class="step-num">8</span><div class="step-text">All road plates pinned and ramped</div></div>
+        <div class="step-row"><span class="step-num">9</span><div class="step-text">Inspect — no tools / equipment / debris left</div></div>
+      </div>
+    </div>
+
+    <!-- SIGN DISTANCES -->
+    <div class="panel">
+      <div class="panel-header"><div class="accent" style="background:var(--c-sawcut)"></div>Sign Distances</div>
+      <div class="panel-body">
+        <table class="ref-tbl">
+          <thead><tr><th>Duration</th><th>Distance</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Short (≤3 days)</td><td class="val green">150 ft</td><td style="font-size:12px;color:var(--dim)">MH operation, parking lane</td></tr>
+            <tr><td>Long (&gt;3 days)</td><td class="val gold">300 ft</td><td style="font-size:12px;color:var(--dim)">Excavation in travel lane</td></tr>
+            <tr><td>Bike Lane</td><td class="val" style="color:var(--c-electric)">350 + 200 + at zone</td><td style="font-size:12px;color:var(--dim)">When permit stipulates</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /grid row 1 -->
+
+  <div class="grid section-gap">
+
+    <!-- KEY EQUIPMENT SPECS -->
+    <div class="panel" style="grid-column: span 2;">
+      <div class="panel-header"><div class="accent" style="background:var(--coned)"></div>Key Equipment Specs</div>
+      <div class="panel-body">
+        <table class="ref-tbl">
+          <thead><tr><th>Equipment</th><th>Specification</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Cones</td><td class="val">28–36" orange, two reflectorized bands</td><td style="font-size:12px;color:var(--dim)">Night: lighting required</td></tr>
+            <tr><td>Type I Barricade</td><td class="val">1 rail, ≥2' long, ≥36" high</td><td style="font-size:12px;color:var(--dim)">Short-duration / excavations</td></tr>
+            <tr><td>Type II Barricade</td><td class="val">2 rails</td><td style="font-size:12px;color:var(--dim)">Large structures (no MH guardrail)</td></tr>
+            <tr><td>Type III Barricade</td><td class="val">3 rails, ≥4' long, ≥60" high</td><td style="font-size:12px;color:var(--dim)">Long-duration, facing traffic</td></tr>
+            <tr><td>Barricade Rails</td><td class="val">Orange/white 45° stripes</td><td style="font-size:12px;color:var(--dim)">Retroreflective for night</td></tr>
+            <tr><td>Ped Passageways</td><td class="val gold">MINIMUM 5 feet wide</td><td>—</td></tr>
+            <tr><td>Stanchions</td><td class="val">Orange, ≥42" high, two bands</td><td>—</td></tr>
+            <tr><td>MH Guardrails</td><td class="val">3 sides, 2 rails + toe board, ≥42"</td><td style="font-size:12px;color:var(--dim)">S1/S2/S3, 32"/44" covers</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- WHEEL CHOCKS -->
+    <div class="panel">
+      <div class="panel-header"><div class="accent" style="background:var(--c-main)"></div>Wheel Chocks</div>
+      <div class="panel-body">
+        <table class="ref-tbl">
+          <thead><tr><th>Vehicle</th><th>Chocks</th><th>Placement</th></tr></thead>
+          <tbody>
+            <tr><td>≤26,001 GVWR</td><td class="val">2</td><td style="font-size:12px;">Front + behind ONE rear wheel</td></tr>
+            <tr><td>≥26,001 GVWR</td><td class="val">4</td><td style="font-size:12px;">Front + behind BOTH rear wheels</td></tr>
+            <tr><td>Uphill grade</td><td class="val">—</td><td style="font-size:12px;">Behind rear wheels, both sides</td></tr>
+            <tr><td>Downhill grade</td><td class="val">—</td><td style="font-size:12px;">In front of rear wheels</td></tr>
+            <tr><td colspan="3" style="color:var(--c-leak);font-weight:700;font-size:12px;">E-brake ON at all times — chocks MUST contact tires, NO gap</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /grid row 2 -->
+
+  <!-- ROW 3: Plates & Flaggers -->
+  <div class="grid section-gap">
+
+    <!-- PLATES & EXCAVATION -->
+    <div class="panel">
+      <div class="panel-header"><div class="accent" style="background:var(--c-excavation)"></div>Plates &amp; Excavation</div>
+      <div class="panel-body">
+        <table class="ref-tbl">
+          <thead><tr><th>Topic</th><th>Requirement</th><th>Condition</th></tr></thead>
+          <tbody>
+            <tr><td>Bearing</td><td class="val">≥1 ft each side of opening</td><td>—</td></tr>
+            <tr><td>Edges</td><td class="val">Tapered / ramped — no trip hazards</td><td>—</td></tr>
+            <tr><td>Fastening</td><td class="val">Pinned in pre-drilled holes or spiked from side</td><td>—</td></tr>
+            <tr><td>Winter Moratorium</td><td class="val gold">Dec 1 – Mar 1: travel lane plates MUST be recessed</td><td style="font-size:12px;">Unless work ≤5 days</td></tr>
+            <tr><td>Winter Signs</td><td class="val">"Steel Plates Ahead" / "Raise Plow" required Dec 1–Mar 1</td><td style="font-size:12px;">Even if recessed</td></tr>
+            <tr><td>Night</td><td class="val">Low-intensity lights at ≤20 ft intervals on barricades</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FLAGGERS -->
+    <div class="panel">
+      <div class="panel-header"><div class="accent" style="background:var(--c-leak)"></div>Flaggers</div>
+      <div class="panel-body">
+        <table class="ref-tbl">
+          <thead><tr><th>Topic</th><th>Requirement</th></tr></thead>
+          <tbody>
+            <tr><td>Apparel</td><td class="val">ANSI 107-2010 Class 2 or 3</td></tr>
+            <tr><td>Sign</td><td class="val">Flagger Ahead sign BEFORE station</td></tr>
+            <tr><td>Position</td><td class="val">Start of taper — face traffic — eye contact</td></tr>
+            <tr><td>Stand Alone</td><td class="val">No workers at flagger station</td></tr>
+            <tr><td>Distractions</td><td class="val warn">NO cell phones or devices while flagging</td></tr>
+            <tr><td>Two Flaggers</td><td class="val">One is lead — not visible → radio comms</td></tr>
+            <tr><td>Night</td><td class="val">Must be illuminated</td></tr>
+            <tr><td>Signals</td><td class="val">STOP, SLOW, PROCEED only</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /row 3 -->
+
+  <div class="warn-banner section-gap">
+    ⚠ USE OF PNEUMATIC TOOL INSIDE TRENCH REQUIRES APPROVAL FROM CCI
+  </div>
+
+</div><!-- /main -->
+</body>
+</html>
