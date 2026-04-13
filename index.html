@@ -1060,7 +1060,8 @@ function cardHtml(item) {
     : '';
 
   const noteHtml = item.note
-    ? `<div class="card-note">${item.note}</div>` : '';
+    ? `<div class="card-note">${(item.note).replace(/—/g,'&#8212;')}</div>` : '';
+  const cardDesc = (item.desc||'').replace(/—/g,'&#8212;').replace(/×/g,'&#215;');
 
   return `<div class="card">
     <div class="card-accent" style="background:${color}"></div>
@@ -1072,7 +1073,7 @@ function cardHtml(item) {
           ${typeBadgeHtml(item.type)}
         </div>
       </div>
-      <div class="card-desc">${item.desc}</div>
+      <div class="card-desc">${cardDesc}</div>
       ${noteHtml}
       <div class="card-foot">
         <span class="unit-pill">${UNIT_FULL[item.unit]||item.unit}</span>
@@ -1176,17 +1177,19 @@ function render() {
       const isCommon = COMMON.has(item.code);
       const noteLine = item.note ? `<div class="row-note">${item.note}</div>` : '';
       const typeLine = item.type ? typeBadgeHtml(item.type) : '';
+      const desc = (item.desc || '').replace(/—/g, '&#8212;').replace(/×/g, '&#215;');
+      const note = (item.note || '').replace(/—/g, '&#8212;');
       return `<div class="list-row">
         <div class="row-accent" style="background:${color}"></div>
         <div class="row-star">${isCommon ? '⭐' : ''}</div>
         <div class="row-code">${item.code}</div>
         <div class="row-body">
-          <div class="row-desc">${item.desc}</div>
+          <div class="row-desc">${desc}</div>
           <div class="row-meta">
             <span class="row-unit">${UNIT_FULL[item.unit]||item.unit}</span>
             ${typeLine}
           </div>
-          ${noteLine}
+          ${note ? `<div class="row-note">${note}</div>` : ''}
         </div>
       </div>`;
     }).join('');
