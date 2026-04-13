@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gas Symbols — XCMG</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#000;--surface:#0d0d0d;--panel:#111;--border:#1e1e1e;--border2:#2a2a2a;
+  --text:#e8eaf0;--muted:#7b82a0;--dim:#4a5068;
+  --coned:#4ab3e8;--green:#48c98e;--red:#ff5f5f;--gold:#ffd04b;--blue:#6c8fff;--purple:#b07aff;
+  --font:-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:"SF Mono","Cascadia Code","Consolas",monospace;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;}
+
+/* NAV */
+.sitenav{background:#000;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:4px;padding:0 16px;height:38px;overflow-x:auto;position:sticky;top:0;z-index:100;-webkit-overflow-scrolling:touch;}
+.sitenav::-webkit-scrollbar{display:none;}
+.sitenav a{color:var(--muted);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 10px;height:38px;display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.15s;}
+.sitenav a:hover{color:var(--text);}
+.sitenav a.active{color:var(--coned);border-bottom-color:var(--coned);}
+.nav-divider{width:1px;height:18px;background:var(--border2);flex-shrink:0;margin:0 4px;}
+
+/* HEADER */
+.header{background:#000;border-bottom:2px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:12px;height:52px;}
+.logo{background:var(--coned);color:#000;font-weight:800;font-size:13px;letter-spacing:2px;padding:5px 10px;border-radius:3px;flex-shrink:0;}
+.header-title{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);opacity:.9;}
+
+/* LAYOUT */
+.main{padding:16px;max-width:1200px;margin:0 auto;}
+.section{margin-top:20px;}
+.section-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--dim);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:2px;}
+
+/* SYMBOL ROWS */
+.sym-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--border);}
+.sym-row{background:var(--bg);display:flex;align-items:center;gap:0;padding:0;transition:background 0.1s;min-height:48px;}
+.sym-row:hover{background:var(--surface);}
+
+/* symbol graphic cell */
+.sym-icon{
+  min-width:80px;width:80px;
+  display:flex;align-items:center;justify-content:center;
+  padding:8px 6px;
+  flex-shrink:0;
+  border-right:1px solid var(--border);
+  align-self:stretch;
+}
+
+/* text cell */
+.sym-text{padding:8px 12px;flex:1;min-width:0;}
+.sym-name{font-size:13px;color:#fff;font-weight:600;line-height:1.3;}
+.sym-abbr{font-family:var(--mono);font-size:11px;color:var(--coned);margin-top:2px;}
+.sym-note{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.3;}
+
+/* ── INLINE SVG SYMBOLS ── */
+svg.sym{display:block;}
+
+/* color classes */
+.col-g{color:#2ecc40;}   /* green = standard */
+.col-r{color:#ff4444;}   /* red = special/district */
+.col-b{color:#4ab3e8;}   /* blue = cathodic */
+.col-p{color:#b07aff;}   /* purple = drip/seal */
+
+/* abbreviation table */
+.abbr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1px;background:var(--border);}
+.abbr-row{background:var(--bg);display:flex;align-items:center;gap:10px;padding:8px 12px;}
+.abbr-row:hover{background:var(--surface);}
+.abbr-code{font-family:var(--mono);font-size:12px;font-weight:800;color:var(--gold);min-width:60px;flex-shrink:0;}
+.abbr-def{font-size:12px;color:var(--muted);}
+
+@media(max-width:600px){
+  .sym-grid{grid-template-columns:1fr;}
+  .abbr-grid{grid-template-columns:1fr;}
+  .main{padding:10px;}
+}
+@media(min-width:900px){.main{padding:16px 24px;}}
+</style>
+</head>
+<body>
+
+<nav class="sitenav">
+  <a href="index.html">&#9874; Item Search</a>
+  <div class="nav-divider"></div>
+  <a href="quick-reference.html">&#128203; Quick Reference</a>
+  <div class="nav-divider"></div>
+  <a href="gas-symbols.html" class="active">&#128506; Gas Symbols</a>
+</nav>
+
+<header class="header">
+  <div class="logo">XCMG</div>
+  <div class="header-title">Gas M&amp;S Plate Symbols</div>
+</header>
+
+<div class="main">
+
+  <!-- JOINTS -->
+  <div class="section-label">Joints</div>
+  <div class="sym-grid">
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <line x1="35" y1="8" x2="35" y2="22" stroke="#2ecc40" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Joint</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <!-- cap end bracket -->
+          <polyline points="20,8 5,8 5,22 20,22" fill="none" stroke="#2ecc40" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Cap or Plug</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <line x1="32" y1="8" x2="32" y2="22" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="38" y1="8" x2="38" y2="22" stroke="#2ecc40" stroke-width="1.5"/>
+          <text x="35" y="7" font-size="7" fill="#2ecc40" text-anchor="middle" font-family="monospace">RE</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Reinforced Joint</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <line x1="35" y1="8" x2="35" y2="22" stroke="#2ecc40" stroke-width="2"/>
+          <text x="35" y="7" font-size="7" fill="#2ecc40" text-anchor="middle" font-family="monospace">C</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Clamped Joint</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <line x1="35" y1="8" x2="35" y2="22" stroke="#2ecc40" stroke-width="2"/>
+          <text x="35" y="7" font-size="7" fill="#2ecc40" text-anchor="middle" font-family="monospace">A</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Unable to Clamp Joint</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <!-- dresser: double hash -->
+          <line x1="29" y1="7" x2="29" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="33" y1="7" x2="33" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="25" y1="11" x2="37" y2="11" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="25" y1="19" x2="37" y2="19" stroke="#2ecc40" stroke-width="1.5"/>
+          <text x="35" y="7" font-size="6" fill="#2ecc40" font-family="monospace"></text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Dresser Coupling</div><div class="sym-abbr">double hash marks</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <!-- posihold: double dresser (two double-hash) -->
+          <line x1="22" y1="7" x2="22" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="26" y1="7" x2="26" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="18" y1="11" x2="30" y2="11" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="18" y1="19" x2="30" y2="19" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="43" y1="7" x2="43" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="47" y1="7" x2="47" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="39" y1="11" x2="51" y2="11" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="39" y1="19" x2="51" y2="19" stroke="#2ecc40" stroke-width="1.5"/>
+          <text x="35" y="27" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">P.H.</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Posihold Coupling</div><div class="sym-abbr">P.H.</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <!-- electrofuse: triple hash marks -->
+          <line x1="27" y1="7" x2="27" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="31" y1="7" x2="31" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="35" y1="7" x2="35" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="23" y1="11" x2="39" y2="11" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="23" y1="19" x2="39" y2="19" stroke="#2ecc40" stroke-width="1.5"/>
+          <text x="35" y="27" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">E.F.</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Electrofuse Coupling</div><div class="sym-abbr">E.F.</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <!-- victaulic: double hash like dresser -->
+          <line x1="29" y1="7" x2="29" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="33" y1="7" x2="33" y2="23" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="25" y1="11" x2="37" y2="11" stroke="#2ecc40" stroke-width="1.5"/>
+          <line x1="25" y1="19" x2="37" y2="19" stroke="#2ecc40" stroke-width="1.5"/>
+          <text x="35" y="27" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">V.J.</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Victaulic Joint</div><div class="sym-abbr">V.J.</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <line x1="35" y1="8" x2="35" y2="22" stroke="#2ecc40" stroke-width="2"/>
+          <text x="35" y="7" font-size="7" fill="#2ecc40" text-anchor="middle" font-family="monospace">S</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Joint Sealed</div><div class="sym-abbr">S</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <line x1="35" y1="8" x2="35" y2="22" stroke="#2ecc40" stroke-width="2"/>
+          <text x="35" y="7" font-size="7" fill="#2ecc40" text-anchor="middle" font-family="monospace">K</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Joint Keyholed</div><div class="sym-abbr">K</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <line x1="35" y1="8" x2="35" y2="22" stroke="#2ecc40" stroke-width="2"/>
+          <text x="35" y="7" font-size="6" fill="#2ecc40" text-anchor="middle" font-family="monospace">S/S</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Shrink Sleeve</div><div class="sym-abbr">S/S</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <line x1="35" y1="8" x2="35" y2="22" stroke="#2ecc40" stroke-width="2"/>
+          <text x="35" y="7" font-size="6" fill="#2ecc40" text-anchor="middle" font-family="monospace">E</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Emcapress / Avon Seal</div><div class="sym-abbr">E / AV</div></div>
+    </div>
+
+    <div class="sym-row">
+      <div class="sym-icon">
+        <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+          <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+          <line x1="35" y1="8" x2="35" y2="22" stroke="#2ecc40" stroke-width="2"/>
+          <text x="35" y="7" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">SS</text>
+          <text x="35" y="27" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">SVC</text>
+        </svg>
+      </div>
+      <div class="sym-text"><div class="sym-name">Service Sealed</div><div class="sym-abbr">SS</div></div>
+    </div>
+
+  </div><!-- /joints -->
+
+  <!-- FITTINGS -->
+  <div class="section">
+    <div class="section-label">Fittings &amp; Hardware</div>
+    <div class="sym-grid">
+
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- reducer: triangle pointing right -->
+            <polygon points="25,8 45,15 25,22" fill="#2ecc40"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Reducer</div></div>
+      </div>
+
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- repair sleeve: two bowtie shapes -->
+            <polygon points="22,8 30,15 22,22" fill="#2ecc40"/>
+            <polygon points="38,8 30,15 38,22" fill="#2ecc40"/>
+            <polygon points="38,8 46,15 38,22" fill="#2ecc40"/>
+            <polygon points="54,8 46,15 54,22" fill="#2ecc40"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Repair Sleeve (Clamp)</div></div>
+      </div>
+
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- thermoweld: bowtie -->
+            <polygon points="22,8 35,15 22,22" fill="#2ecc40"/>
+            <polygon points="48,8 35,15 48,22" fill="#2ecc40"/>
+            <text x="35" y="7" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">T.S.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Thermofit / Thermoweld Sleeve</div><div class="sym-abbr">T.S.</div></div>
+      </div>
+
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- sleeve w/disk: bowtie with bar -->
+            <polygon points="22,8 35,15 22,22" fill="#2ecc40"/>
+            <polygon points="48,8 35,15 48,22" fill="#2ecc40"/>
+            <line x1="35" y1="8" x2="35" y2="22" stroke="#2ecc40" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Sleeve w/ Disk</div></div>
+      </div>
+
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- expansion joint: diamond -->
+            <polygon points="35,7 47,15 35,23 23,15" fill="#2ecc40"/>
+            <text x="35" y="5" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">E.J.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Expansion Joint</div><div class="sym-abbr">E.J.</div></div>
+      </div>
+
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- insulating joint: two small tick marks -->
+            <line x1="30" y1="8" x2="30" y2="22" stroke="#2ecc40" stroke-width="2"/>
+            <line x1="40" y1="8" x2="40" y2="22" stroke="#2ecc40" stroke-width="2"/>
+            <text x="35" y="5" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">I.J.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Insulating Joint</div><div class="sym-abbr">I.J.</div></div>
+      </div>
+
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- transition fitting: small square on line -->
+            <rect x="26" y="8" width="18" height="14" fill="none" stroke="#2ecc40" stroke-width="2"/>
+            <text x="35" y="5" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">T.F.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Transition Fitting</div><div class="sym-abbr">T.F.</div></div>
+      </div>
+
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- orifice fitting: small square with circle inside -->
+            <rect x="24" y="7" width="22" height="16" fill="none" stroke="#2ecc40" stroke-width="1.5"/>
+            <circle cx="35" cy="15" r="4" fill="none" stroke="#2ecc40" stroke-width="1.5"/>
+            <text x="35" y="5" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">OF</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Orifice Fitting</div><div class="sym-abbr">OF</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VALVES & TAPS -->
+  <div class="section">
+    <div class="section-label">Valves, Taps &amp; Controls</div>
+    <div class="sym-grid">
+
+      <!-- Main Tap (Baghole) -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="20" x2="65" y2="20" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- tap: vertical line going up from main -->
+            <line x1="35" y1="20" x2="35" y2="5" stroke="#2ecc40" stroke-width="2"/>
+            <line x1="25" y1="5" x2="45" y2="5" stroke="#2ecc40" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Main Tap (Baghole)</div></div>
+      </div>
+
+      <!-- Main Tap w/ Purge Pipe -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="20" x2="65" y2="20" stroke="#2ecc40" stroke-width="2.5"/>
+            <line x1="35" y1="20" x2="35" y2="5" stroke="#2ecc40" stroke-width="2"/>
+            <line x1="25" y1="5" x2="45" y2="5" stroke="#2ecc40" stroke-width="2"/>
+            <!-- purge pipe: diamond on stem -->
+            <polygon points="35,12 40,8 35,4 30,8" fill="#2ecc40"/>
+            <text x="35" y="38" font-size="5.5" fill="#2ecc40" text-anchor="middle" font-family="monospace">PURGE</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Main Tap w/ Purge Pipe</div></div>
+      </div>
+
+      <!-- Main Valve (Buried) - open circle, red -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <circle cx="35" cy="15" r="10" fill="none" stroke="#ff4444" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Main Valve (Buried)</div><div class="sym-note">Red open circle on main</div></div>
+      </div>
+
+      <!-- Convenience Valve (Buried) - X in circle, red -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <circle cx="35" cy="15" r="10" fill="none" stroke="#ff4444" stroke-width="2.5"/>
+            <line x1="28" y1="8" x2="42" y2="22" stroke="#ff4444" stroke-width="2"/>
+            <line x1="42" y1="8" x2="28" y2="22" stroke="#ff4444" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Convenience Valve (Buried)</div><div class="sym-note">Red circle with X</div></div>
+      </div>
+
+      <!-- Main Valve w/ Offset Stem - circle with T stem, red -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="20" x2="65" y2="20" stroke="#2ecc40" stroke-width="2.5"/>
+            <circle cx="35" cy="22" r="9" fill="none" stroke="#ff4444" stroke-width="2.5"/>
+            <!-- T stem above -->
+            <line x1="35" y1="13" x2="35" y2="6" stroke="#ff4444" stroke-width="2"/>
+            <line x1="29" y1="6" x2="41" y2="6" stroke="#ff4444" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Main Valve w/ Offset Stem</div><div class="sym-note">Red circle with T above</div></div>
+      </div>
+
+      <!-- Main Valve Remotely Operated - open circle, red -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <circle cx="35" cy="15" r="10" fill="none" stroke="#ff4444" stroke-width="2.5"/>
+            <text x="35" y="28" font-size="5" fill="#ff4444" text-anchor="middle" font-family="monospace">R.O.V.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Main Valve Remotely Operated</div><div class="sym-abbr">R.O.V.</div></div>
+      </div>
+
+      <!-- Main Valve (Throttling) - circle with T inside, red -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <circle cx="35" cy="15" r="10" fill="none" stroke="#ff4444" stroke-width="2.5"/>
+            <text x="35" y="19" font-size="9" fill="#ff4444" text-anchor="middle" font-family="sans-serif" font-weight="bold">T</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Main Valve (Throttling)</div></div>
+      </div>
+
+      <!-- Remote Operated Valve & Vent Post - box with VP, red -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <rect x="22" y="6" width="26" height="18" fill="none" stroke="#ff4444" stroke-width="2"/>
+            <text x="35" y="19" font-size="8" fill="#ff4444" text-anchor="middle" font-family="monospace" font-weight="bold">VP</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Remote Operated Valve &amp; Vent Post</div><div class="sym-abbr">VP (red box)</div></div>
+      </div>
+
+      <!-- Excess Flow Valve - triangle arrow, red -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- arrow pointing left (red) -->
+            <polygon points="45,7 25,15 45,23" fill="none" stroke="#ff4444" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Excess Flow Valve</div><div class="sym-note">Red open triangle / arrow on main</div></div>
+      </div>
+
+      <!-- Lamp Service - L.S. box, green -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="20" x2="65" y2="20" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- lamp service: rectangle with L.S. above line on stem -->
+            <line x1="35" y1="20" x2="35" y2="8" stroke="#2ecc40" stroke-width="1.5"/>
+            <rect x="25" y="3" width="20" height="10" fill="none" stroke="#2ecc40" stroke-width="1.5"/>
+            <text x="35" y="11" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">L.S.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Lamp Service</div><div class="sym-abbr">L.S.</div></div>
+      </div>
+
+      <!-- Special Tapping Tee - green square on line -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <rect x="24" y="6" width="22" height="18" fill="none" stroke="#2ecc40" stroke-width="2"/>
+            <text x="35" y="5" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">S.T.T.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Special Tapping Tee</div><div class="sym-abbr">S.T.T.</div></div>
+      </div>
+
+      <!-- H.P.C.F. - red box with dot -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <rect x="24" y="6" width="22" height="18" fill="none" stroke="#ff4444" stroke-width="2"/>
+            <circle cx="35" cy="15" r="2" fill="#ff4444"/>
+            <text x="35" y="5" font-size="5" fill="#ff4444" text-anchor="middle" font-family="monospace">H.P.C.F.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">High Pressure Control Fitting</div><div class="sym-abbr">H.P.C.F. (red box with dot)</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DISTRICT / MAINS -->
+  <div class="section">
+    <div class="section-label">District Regulator, Mains &amp; Crossovers</div>
+    <div class="sym-grid">
+
+      <!-- District Regulator - R in red box -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <rect x="22" y="5" width="26" height="20" fill="none" stroke="#ff4444" stroke-width="2"/>
+            <circle cx="35" cy="15" r="8" fill="none" stroke="#ff4444" stroke-width="1.5"/>
+            <text x="35" y="19" font-size="9" fill="#ff4444" text-anchor="middle" font-family="sans-serif" font-weight="bold">R</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">District Regulator</div><div class="sym-note">Red circle in red box</div></div>
+      </div>
+
+      <!-- Gauge Post - rectangle with P, green -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="20" x2="65" y2="20" stroke="#2ecc40" stroke-width="2.5"/>
+            <line x1="35" y1="20" x2="35" y2="8" stroke="#2ecc40" stroke-width="1.5"/>
+            <rect x="22" y="3" width="26" height="10" fill="none" stroke="#2ecc40" stroke-width="1.5"/>
+            <text x="35" y="11" font-size="7" fill="#2ecc40" text-anchor="middle" font-family="monospace">P</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Gauge Post</div></div>
+      </div>
+
+      <!-- Crossover Mains (Not Tied) -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <line x1="5" y1="25" x2="65" y2="25" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- curved bridge showing not tied -->
+            <path d="M 30,25 Q 35,15 40,25" fill="none" stroke="#2ecc40" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Crossover Mains (Not Tied)</div><div class="sym-note">Bridge curve — mains cross but not connected</div></div>
+      </div>
+
+      <!-- Crossover Mains (Tied) -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <line x1="5" y1="25" x2="65" y2="25" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- tick marks on both: tied -->
+            <line x1="30" y1="10" x2="30" y2="30" stroke="#2ecc40" stroke-width="2"/>
+            <line x1="40" y1="10" x2="40" y2="30" stroke="#2ecc40" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Crossover Mains (Tied)</div><div class="sym-note">Tick marks crossing both mains</div></div>
+      </div>
+
+      <!-- Main Tee -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="20" x2="65" y2="20" stroke="#2ecc40" stroke-width="2.5"/>
+            <line x1="35" y1="20" x2="35" y2="5" stroke="#2ecc40" stroke-width="2.5"/>
+            <line x1="25" y1="20" x2="25" y2="10" stroke="#2ecc40" stroke-width="1.5"/>
+            <line x1="45" y1="20" x2="45" y2="10" stroke="#2ecc40" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Main Tee</div></div>
+      </div>
+
+      <!-- Pitch of Main & Cover -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="50" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- solid triangle for pitch/slope -->
+            <polygon points="50,8 65,15 50,22" fill="#2ecc40"/>
+            <text x="35" y="8" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">3'0"C</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Pitch of Main &amp; Cover</div><div class="sym-note">Arrow with depth notation (e.g. 3'0"C)</div></div>
+      </div>
+
+      <!-- Pipe Line Marker -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- filled circle on line -->
+            <circle cx="35" cy="15" r="8" fill="#2ecc40"/>
+            <text x="35" y="28" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">P.L.M.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Pipe Line Marker</div><div class="sym-abbr">P.L.M. — solid green circle</div></div>
+      </div>
+
+      <!-- Non-Sectionalizing Stopper Standpipe -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- half-filled circle = stopper standpipe -->
+            <circle cx="35" cy="15" r="9" fill="none" stroke="#2ecc40" stroke-width="2"/>
+            <!-- half fill -->
+            <path d="M 26,15 A 9,9 0 0 1 44,15 Z" fill="#2ecc40"/>
+            <text x="35" y="28" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">N.S.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Stopper Standpipe (Non-Sectionalizing)</div><div class="sym-abbr">N.S.</div></div>
+      </div>
+
+      <!-- Pumping Standpipe -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- small dot in circle -->
+            <circle cx="35" cy="15" r="9" fill="none" stroke="#2ecc40" stroke-width="2"/>
+            <circle cx="35" cy="15" r="2" fill="#2ecc40"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Pumping Standpipe</div><div class="sym-note">Open circle with small dot</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DRIPS & SEAL POTS -->
+  <div class="section">
+    <div class="section-label">Drips, Seal Pots &amp; Misc</div>
+    <div class="sym-grid">
+
+      <!-- Drip - filled circle, purple/blue -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <circle cx="35" cy="15" r="9" fill="#5b3bc9"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Drip</div><div class="sym-note">Solid purple/blue circle</div></div>
+      </div>
+
+      <!-- Drip w/ Offset Stem - filled circle with T stem above, purple -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="22" x2="65" y2="22" stroke="#2ecc40" stroke-width="2.5"/>
+            <circle cx="35" cy="24" r="9" fill="#5b3bc9"/>
+            <line x1="35" y1="15" x2="35" y2="8" stroke="#ff4444" stroke-width="2"/>
+            <line x1="29" y1="8" x2="41" y2="8" stroke="#ff4444" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Drip w/ Offset Stem</div><div class="sym-note">Purple circle with red T stem above</div></div>
+      </div>
+
+      <!-- Drip w/ Aux Valve - two open circles on stem -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="25" x2="65" y2="25" stroke="#2ecc40" stroke-width="2.5"/>
+            <circle cx="35" cy="27" r="8" fill="#5b3bc9"/>
+            <!-- two open circles on stem above (purple) -->
+            <line x1="35" y1="19" x2="35" y2="8" stroke="#5b3bc9" stroke-width="1.5"/>
+            <circle cx="28" cy="8" r="4" fill="none" stroke="#5b3bc9" stroke-width="1.5"/>
+            <circle cx="42" cy="8" r="4" fill="none" stroke="#5b3bc9" stroke-width="1.5"/>
+            <line x1="24" y1="8" x2="46" y2="8" stroke="#5b3bc9" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Drip w/ Aux. Valve &amp; Box</div><div class="sym-note">Purple filled circle with two open circles above</div></div>
+      </div>
+
+      <!-- Seal Pot - filled circle, green -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="30" viewBox="0 0 70 30">
+            <line x1="5" y1="15" x2="65" y2="15" stroke="#2ecc40" stroke-width="2.5"/>
+            <circle cx="35" cy="15" r="9" fill="#2ecc40"/>
+            <text x="35" y="28" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">SEAL POT</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Seal Pot</div><div class="sym-note">Solid green filled circle</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CATHODIC PROTECTION -->
+  <div class="section">
+    <div class="section-label">Cathodic Protection &amp; Test Stations</div>
+    <div class="sym-grid">
+
+      <!-- Test Station -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="25" x2="65" y2="25" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- small square on line -->
+            <rect x="28" y="18" width="14" height="14" fill="none" stroke="#2ecc40" stroke-width="2"/>
+            <rect x="31" y="21" width="8" height="8" fill="none" stroke="#2ecc40" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Test Station</div><div class="sym-note">Square with inner square on line</div></div>
+      </div>
+
+      <!-- Test Station & Mag Anode -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="28" x2="65" y2="28" stroke="#2ecc40" stroke-width="2.5"/>
+            <rect x="28" y="21" width="14" height="14" fill="none" stroke="#2ecc40" stroke-width="2"/>
+            <!-- circle on stem above -->
+            <line x1="35" y1="21" x2="35" y2="12" stroke="#2ecc40" stroke-width="1.5"/>
+            <circle cx="35" cy="8" r="4" fill="none" stroke="#2ecc40" stroke-width="1.5"/>
+            <text x="35" y="38" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">4-M.A.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Test Station &amp; Mag. Anode</div><div class="sym-note">Square with circle on stem — figure shows count of anodes</div></div>
+      </div>
+
+      <!-- Atmospheric Test Station -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="25" x2="65" y2="25" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- plain square -->
+            <rect x="28" y="18" width="14" height="14" fill="none" stroke="#2ecc40" stroke-width="2"/>
+            <circle cx="35" cy="25" r="2" fill="#2ecc40"/>
+            <text x="35" y="38" font-size="5" fill="#2ecc40" text-anchor="middle" font-family="monospace">A.T.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Atmospheric Test Station</div><div class="sym-abbr">A.T.</div></div>
+      </div>
+
+      <!-- Electrolysis Test Station -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="28" x2="65" y2="28" stroke="#2ecc40" stroke-width="2.5"/>
+            <rect x="26" y="20" width="18" height="16" fill="none" stroke="#2ecc40" stroke-width="2"/>
+            <circle cx="35" cy="28" r="5" fill="none" stroke="#2ecc40" stroke-width="1.5"/>
+            <text x="35" y="38" font-size="4.5" fill="#2ecc40" text-anchor="middle" font-family="monospace">ELEC.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Electrolysis Test Station</div><div class="sym-note">Square with circle inside</div></div>
+      </div>
+
+      <!-- Magnesium Anode -->
+      <div class="sym-row">
+        <div class="sym-icon">
+          <svg class="sym" width="70" height="40" viewBox="0 0 70 40">
+            <line x1="5" y1="28" x2="65" y2="28" stroke="#2ecc40" stroke-width="2.5"/>
+            <!-- small square on line -->
+            <rect x="28" y="22" width="14" height="12" fill="none" stroke="#4ab3e8" stroke-width="2"/>
+            <text x="35" y="38" font-size="4.5" fill="#4ab3e8" text-anchor="middle" font-family="monospace">M.A.</text>
+          </svg>
+        </div>
+        <div class="sym-text"><div class="sym-name">Magnesium Anode</div><div class="sym-abbr">M.A.</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ABBREVIATIONS -->
+  <div class="section">
+    <div class="section-label">Abbreviations &amp; Sealing Methods</div>
+    <div class="abbr-grid">
+      <div class="abbr-row"><div class="abbr-code">E.S.</div><div class="abbr-def">Epi-Seal</div></div>
+      <div class="abbr-row"><div class="abbr-code">N.L.</div><div class="abbr-def">Never Leak</div></div>
+      <div class="abbr-row"><div class="abbr-code">A.S.</div><div class="abbr-def">Auto Seal — evenly spaced when all joints sealed</div></div>
+      <div class="abbr-row"><div class="abbr-code">J.S.</div><div class="abbr-def">Joints Sealed by Internal Application of Compound</div></div>
+      <div class="abbr-row"><div class="abbr-code">SS</div><div class="abbr-def">Service Sealed</div></div>
+      <div class="abbr-row"><div class="abbr-code">P.L.M.</div><div class="abbr-def">Pipe Line Marker</div></div>
+      <div class="abbr-row"><div class="abbr-code">I.J.</div><div class="abbr-def">Insulating Joint</div></div>
+      <div class="abbr-row"><div class="abbr-code">T.F.</div><div class="abbr-def">Transition Fitting</div></div>
+      <div class="abbr-row"><div class="abbr-code">E.J.</div><div class="abbr-def">Expansion Joint</div></div>
+      <div class="abbr-row"><div class="abbr-code">N.S.</div><div class="abbr-def">Non-Sectionalizing (Stopper Standpipe)</div></div>
+      <div class="abbr-row"><div class="abbr-code">R.O.V.</div><div class="abbr-def">Remotely Operated Valve</div></div>
+      <div class="abbr-row"><div class="abbr-code">H.P.C.F.</div><div class="abbr-def">High Pressure Control Fitting</div></div>
+      <div class="abbr-row"><div class="abbr-code">S.T.T.</div><div class="abbr-def">Special Tapping Tee</div></div>
+      <div class="abbr-row"><div class="abbr-code">T.S.</div><div class="abbr-def">Thermofit / Thermoweld Sleeve</div></div>
+      <div class="abbr-row"><div class="abbr-code">V.J.</div><div class="abbr-def">Victaulic Joint</div></div>
+      <div class="abbr-row"><div class="abbr-code">E.F.</div><div class="abbr-def">Electrofuse Coupling</div></div>
+      <div class="abbr-row"><div class="abbr-code">P.H.</div><div class="abbr-def">Posihold Coupling</div></div>
+      <div class="abbr-row"><div class="abbr-code">A.T.</div><div class="abbr-def">Atmospheric Test Station</div></div>
+      <div class="abbr-row"><div class="abbr-code">4-M.A.</div><div class="abbr-def">Test Station with 4 Magnesium Anodes (figure = count)</div></div>
+      <div class="abbr-row"><div class="abbr-code">PE(B)</div><div class="abbr-def">Polyethylene — Black</div></div>
+      <div class="abbr-row"><div class="abbr-code">PE(T)</div><div class="abbr-def">Polyethylene — Tan</div></div>
+      <div class="abbr-row"><div class="abbr-code">N.T.S.</div><div class="abbr-def">Not to Scale</div></div>
+      <div class="abbr-row"><div class="abbr-code">Area "U"</div><div class="abbr-def">Unstable Soil</div></div>
+      <div class="abbr-row"><div class="abbr-code">L.P.</div><div class="abbr-def">Low Pressure</div></div>
+      <div class="abbr-row"><div class="abbr-code">I.P.</div><div class="abbr-def">Intermediate Pressure</div></div>
+      <div class="abbr-row"><div class="abbr-code">M.P.</div><div class="abbr-def">Medium Pressure</div></div>
+      <div class="abbr-row"><div class="abbr-code">H.P.</div><div class="abbr-def">High Pressure</div></div>
+      <div class="abbr-row"><div class="abbr-code">T.P.</div><div class="abbr-def">Transmission Pressure</div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
