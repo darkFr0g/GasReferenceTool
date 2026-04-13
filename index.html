@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>XCMG Gas Reference Tool</title>
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --bg:       #0f1117;
+  --surface:  #181b23;
+  --panel:    #1e2130;
+  --border:   #2a2e3d;
+  --border2:  #363b50;
+  --text:     #e8eaf0;
+  --muted:    #7b82a0;
+  --dim:      #4a5068;
+  --coned:    #4ab3e8;
+
+  --c-service:     #4ab3e8;
+  --c-main:        #6c8fff;
+  --c-leak:        #ff5f5f;
+  --c-excavation:  #f0a030;
+  --c-restoration: #48c98e;
+  --c-sawcut:      #d966d6;
+  --c-electric:    #b07aff;
+  --c-misc:        #7b8ab0;
+  --c-common:      #ffd04b;
+
+  --radius: 6px;
+  --font: -apple-system, "Segoe UI", system-ui, sans-serif;
+  --mono: "SF Mono", "Cascadia Code", "Consolas", monospace;
+}
+
+html,body { height:100%; }
+
+html {
+  height: 100%;
+}
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* ── STICKY WRAPPER ── */
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ── SITE NAV ── */
+.sitenav{background:#07090f;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:4px;padding:0 16px;height:38px;overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch;}
+.sitenav::-webkit-scrollbar{display:none;}
+.sitenav a{color:var(--muted);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 10px;height:38px;display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.15s;}
+.sitenav a:hover{color:var(--text);}
+.sitenav a.active{color:var(--coned);border-bottom-color:var(--coned);}
+.nav-divider{width:1px;height:18px;background:var(--border2);flex-shrink:0;margin:0 4px;}
+
+/* ── HEADER ── */
+.header {
+  background: #0a0c12;
+  border-bottom: 2px solid var(--border);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+}
+
+/* ── CONTROLS ── */
+.controls {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.logo {
+  background: var(--coned);
+  color: #000;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 2px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  font-family: var(--font);
+}
+
+.header-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.9;
+}
+
+.header-spacer { flex: 1; }
+
+.count-badge {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.count-badge span { color: var(--coned); font-weight: 700; }
+
+
+.search-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-wrap {
+  flex: 1;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--dim);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+#searchInput {
+  width: 100%;
+  background: var(--panel);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  padding: 9px 70px 9px 36px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+#searchInput:focus { border-color: var(--coned); }
+#searchInput::placeholder { color: var(--dim); }
+
+.clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--border2);
+  border: none;
+  border-radius: 3px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 7px;
+  cursor: pointer;
+  display: none;
+  font-family: var(--font);
+  letter-spacing: 0.5px;
+}
+.clear-btn.show { display: block; }
+.clear-btn:hover { background: var(--c-leak); color: #fff; }
+
+/* tag search */
+.search-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 0 0 2px;
+}
+.stag {
+  background: rgba(74,179,232,0.12);
+  border: 1px solid rgba(74,179,232,0.3);
+  color: var(--coned);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+}
+.stag-x {
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 13px;
+  line-height: 1;
+}
+.stag-x:hover { opacity: 1; color: var(--c-leak); }
+
+.view-toggle {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.view-btn {
+  background: var(--panel);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 16px;
+  padding: 7px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1;
+}
+.view-btn.active, .view-btn:hover {
+  border-color: var(--coned);
+  color: var(--coned);
+  background: rgba(74,179,232,0.08);
+}
+
+/* ── FILTER PILLS ── */
+.filter-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.fpill {
+  background: var(--panel);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  font-family: var(--font);
+}
+.fpill:hover { border-color: var(--border2); color: var(--text); }
+.fpill.active {
+  color: #000;
+  border-color: transparent;
+  font-weight: 700;
+}
+.fpill[data-cat="all"].active        { background: var(--text); color: #000; }
+.fpill[data-cat="common"].active     { background: var(--c-common); }
+.fpill[data-cat="gas-service"].active{ background: var(--c-service); }
+.fpill[data-cat="gas-main"].active   { background: var(--c-main); }
+.fpill[data-cat="gas-leak"].active   { background: var(--c-leak); }
+.fpill[data-cat="excavation"].active { background: var(--c-excavation); }
+.fpill[data-cat="restoration"].active{ background: var(--c-restoration); }
+.fpill[data-cat="saw-cut"].active    { background: var(--c-sawcut); }
+.fpill[data-cat="electric"].active   { background: var(--c-electric); }
+.fpill[data-cat="misc"].active       { background: var(--c-misc); color: #fff; }
+
+/* ── MAIN CONTENT ── */
+.main { padding: 12px 16px 32px; }
+
+/* ── GRID VIEW ── */
+#itemsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 8px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.15s, transform 0.1s;
+  display: flex;
+  flex-direction: column;
+}
+.card:hover {
+  border-color: var(--border2);
+  transform: translateY(-1px);
+}
+
+.card-accent {
+  height: 3px;
+  flex-shrink: 0;
+}
+
+.card-body { padding: 10px 12px 11px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.card-code {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.card-badges { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; justify-content: flex-end; flex-shrink: 0; }
+
+.star { color: var(--c-common); font-size: 13px; }
+
+.type-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.tb-macro       { background: rgba(74,179,232,0.15); color: var(--c-service); }
+.tb-micro       { background: rgba(72,201,142,0.15); color: var(--c-restoration); }
+.tb-incremental { background: rgba(240,160,48,0.15); color: var(--c-excavation); }
+.tb-standalone  { background: rgba(255,208,75,0.15); color: var(--c-common); }
+
+.card-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.45;
+  flex: 1;
+}
+
+.card-note {
+  font-size: 11.5px;
+  color: var(--c-common);
+  background: rgba(255,208,75,0.07);
+  border-left: 2px solid var(--c-common);
+  padding: 4px 8px;
+  border-radius: 0 3px 3px 0;
+  line-height: 1.4;
+}
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.unit-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-family: var(--mono);
+  letter-spacing: 0.3px;
+}
+
+.cat-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+
+.cat-chip {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* ── LIST VIEW ── */
+#itemsList { display: none; }
+#itemsGroup { display: none; }
+
+/* ── LIST VIEW — ROW BASED (no table, no horizontal scroll) ── */
+.list-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  gap: 10px;
+  transition: background 0.1s;
+  min-width: 0;
+}
+.list-row:hover { background: var(--surface); }
+
+.row-accent {
+  width: 3px;
+  min-width: 3px;
+  border-radius: 2px;
+  align-self: stretch;
+  margin-top: 2px;
+}
+
+.row-star {
+  font-size: 12px;
+  min-width: 16px;
+  padding-top: 1px;
+  flex-shrink: 0;
+}
+
+.row-code {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  min-width: 70px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.row-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.row-desc {
+  font-size: 13px;
+  color: #ffffff;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.row-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.row-unit {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.row-note {
+  font-size: 11px;
+  color: var(--c-common);
+  line-height: 1.3;
+}
+
+/* desktop: show extra info inline */
+@media (min-width: 601px) {
+  .row-code { min-width: 90px; }
+}
+
+/* ── GROUP VIEW ── */
+
+.group-section { margin-bottom: 24px; }
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  border-left: 4px solid;
+}
+.group-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.group-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+/* ── NO RESULTS ── */
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--dim);
+  font-size: 14px;
+  letter-spacing: 1px;
+  grid-column: 1/-1;
+}
+.no-results strong { color: var(--muted); display: block; font-size: 18px; margin-bottom: 8px; }
+
+/* ── MULTI-SEARCH TAGS ── */
+.search-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 0 0 2px;
+}
+.stag {
+  background: rgba(74,179,232,0.12);
+  border: 1px solid rgba(74,179,232,0.3);
+  color: var(--coned);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+}
+.stag-x {
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 13px;
+  line-height: 1;
+}
+.stag-x:hover { opacity: 1; color: var(--c-leak); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  /* Force list view only on mobile - hide grid/group buttons */
+  #btnGrid, #btnGroup { display: none; }
+
+  /* Single-row horizontal scroll for filter pills */
+  .filter-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .fpill { flex-shrink: 0; }
+
+  /* Search tags also scroll */
+  .search-tags {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .search-tags::-webkit-scrollbar { display: none; }
+
+  /* Bigger tap targets on search */
+  #searchInput { font-size: 16px; } /* prevents iOS zoom on focus */
+
+  /* Tighter padding on mobile */
+  .main { padding: 8px 10px 40px; }
+  .controls { padding: 8px 10px; gap: 6px; }
+  .header { padding: 0 12px; height: 46px; }
+  .header-title { font-size: 13px; letter-spacing: 1px; }
+  .sitenav { padding: 0 10px; }
+  .count-badge { font-size: 11px; padding: 3px 8px; }
+}
+
+@media (min-width: 900px) {
+  #itemsGrid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+}
+@media (min-width: 1400px) {
+  #itemsGrid { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); }
+  .main { padding: 14px 24px 40px; }
+  .controls { padding: 10px 24px; }
+  .header { padding: 0 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="sticky-top">
+<nav class="sitenav">
+  <a href="index.html" class="active">⚒ Item Search</a>
+  <div class="nav-divider"></div>
+  <a href="quick-reference.html">📋 Quick Reference</a>
+  <div class="nav-divider"></div>
+  <a href="gas-symbols.html">🗺 Gas Symbols</a>
+</nav>
+
+<header class="header">
+  <div class="logo">XCMG</div>
+  <div class="header-title">Gas Reference Tool</div>
+  <div class="header-spacer"></div>
+  <div class="count-badge"><span id="countNum">0</span> items</div>
+</header>
+
+<div class="controls">
+  <div class="search-row">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search code or keyword — press Space or Enter to add tag" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="clear-btn" id="clearBtn">CLEAR</button>
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn active" id="btnList" title="List view">≡</button>
+      <button class="view-btn" id="btnGrid" title="Grid view">⊞</button>
+      <button class="view-btn" id="btnGroup" title="Group by category">◫</button>
+    </div>
+  </div>
+  <div id="searchTags" class="search-tags" style="display:none;"></div>
+  <div class="filter-row" id="filterRow">
+    <button class="fpill active" data-cat="all">All</button>
+    <button class="fpill" data-cat="common">⭐ Common</button>
+    <button class="fpill" data-cat="excavation">Excavation</button>
+    <button class="fpill" data-cat="restoration">Restoration</button>
+    <button class="fpill" data-cat="gas-main">Gas Main</button>
+    <button class="fpill" data-cat="gas-service">Gas Service</button>
+    <button class="fpill" data-cat="gas-leak">Gas Leak</button>
+    <button class="fpill" data-cat="saw-cut">Saw Cut</button>
+    <button class="fpill" data-cat="misc">Misc</button>
+    <button class="fpill" data-cat="electric">Electric</button>
+  </div>
+</div>
+</div><!-- /sticky-top -->
+
+<div class="main">
+  <div id="itemsGrid"></div>
+  <div id="itemsList"><div id="listBody"></div></div>
+  <div id="itemsGroup"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+const CAT_META = {
+  'gas-service':  { label:'Gas Service',  color:'var(--c-service)' },
+  'gas-main':     { label:'Gas Main',     color:'var(--c-main)' },
+  'gas-leak':     { label:'Gas Leak',     color:'var(--c-leak)' },
+  'excavation':   { label:'Excavation',   color:'var(--c-excavation)' },
+  'restoration':  { label:'Restoration',  color:'var(--c-restoration)' },
+  'saw-cut':      { label:'Saw Cut',      color:'var(--c-sawcut)' },
+  'electric':     { label:'Electric',     color:'var(--c-electric)' },
+  'misc':         { label:'Misc',         color:'var(--c-misc)' },
+};
+
+const UNIT_FULL = {
+  CY:'Cubic Yard (CY)', LF:'Linear Foot (LF)', SF:'Square Foot (SF)',
+  EA:'Each (EA)', HR:'Hour (HR)'
+};
+
+const COMMON = new Set([
+  'T43','T2R','T7','T7A','T7R','T101','T101A','T350','GT61',
+  'T50','T51','T51H',
+  'G2AI','G2BI','G2CI','G2DI',
+  'G2AII','G2BII','G2CII','G2DII',
+  'G26A','G26B','G26C','G26D',
+  'G27A','G27B','G27C','G27D',
+  'GT18A','GT18B','GT18C','GT18D',
+  'G18',
+  'GT19A','GT19B','GT19C','GT19D',
+  'GT42A','GT42B','GT42C',
+  'GT31A','GT31B','GT31C','GT31D',
+  'GT200A','GT200AS','GT200B','GT200BS',
+  'G5AI','G5BI','G5CI',
+  'G4JI','G4KI','G4LI',
+  'G3AI','G3BI','G3CI',
+]);
+
+// item: {code, desc, unit, type, cats:[], note?, also?}
+// type: Macro | Micro | Incremental | Stand Alone | ''
+const ITEMS = [
+  // ── RESTORATION ──
+  {code:'T1',   desc:'Asphalt street pavement — no concrete base or <8" asphalt', unit:'CY', type:'Micro', cats:['restoration']},
+  {code:'T2',   desc:'Street surface pavement — any base concrete, block, brick, or asphalt >8"', unit:'CY', type:'Micro', cats:['restoration']},
+  {code:'T2C',  desc:'Same as T2 — must use pneumatic gun with 3" or larger bit', unit:'CY', type:'Micro', cats:['restoration']},
+  {code:'T2R',  desc:'Roadway Top and Base — Furnish and place (1 foot depth)', unit:'CY', type:'Micro', cats:['restoration'], note:'Most common roadway restoration item'},
+  {code:'T2Z',  desc:'Street surface pavement material (concrete, block, brick, or asphalt) >8" depth', unit:'CY', type:'Micro', cats:['restoration']},
+  {code:'T5',   desc:'Light reinforced concrete roadways, sidewalks, or driveways', unit:'CY', type:'Micro', cats:['restoration']},
+  {code:'T6',   desc:'Heavy reinforced (#4 or larger rebar) concrete roadways, sidewalks, or driveways', unit:'CY', type:'Micro', cats:['restoration']},
+  {code:'T7',   desc:'Plain concrete driveways or sidewalks — Excavation Only (× 0.33 ft)', unit:'CY', type:'Micro', cats:['restoration'], note:'Multiply thickness × 0.33 to convert to feet for CY calc'},
+  {code:'T7A',  desc:'Plain concrete driveways or sidewalks — Restoration Only (× 0.33 ft)', unit:'CY', type:'Micro', cats:['restoration'], note:'Installation only — no excavation'},
+  {code:'T7R',  desc:'Plain concrete driveways or sidewalks — Excavation and Full Restoration (× 0.33 ft)', unit:'CY', type:'Micro', cats:['restoration'], note:'Most common sidewalk item'},
+  {code:'T9',   desc:'Block surface — decorative flagstone, brick, Z brick, bluestone with or without base', unit:'SF', type:'Micro', cats:['restoration'], note:'Set aside blocks and special pavers for reuse'},
+  {code:'T15',  desc:'Furnish and install topsoil 6 inches deep', unit:'SF', type:'Micro', cats:['restoration']},
+  {code:'T16',  desc:'Furnish and install sod', unit:'SF', type:'Micro', cats:['restoration']},
+  {code:'T21',  desc:'Concrete curbs, any depth', unit:'LF', type:'Micro', cats:['restoration']},
+  {code:'T22',  desc:'Granite, stone, or similar curbs', unit:'LF', type:'Micro', cats:['restoration']},
+  {code:'T23',  desc:'Steel or steel nosed curbs', unit:'LF', type:'Micro', cats:['restoration']},
+  {code:'T30',  desc:'Furnish, place, and maintain temporary pavement of asphaltic composition', unit:'CY', type:'Micro', cats:['restoration']},
+  {code:'T31',  desc:'Furnish and place binder base', unit:'CY', type:'Micro', cats:['restoration']},
+  {code:'T32',  desc:'Furnish and place concrete', unit:'CY', type:'Micro', cats:['restoration']},
+  {code:'T190', desc:'Reinforced concrete — forms, epoxy coated rebar, placement', unit:'CY', type:'', cats:['restoration']},
+  {code:'T192', desc:'Non-reinforced concrete encasement — simple forms for split ducts, mats, base under pipes', unit:'CY', type:'', cats:['restoration']},
+  {code:'T195', desc:'Furnish, install, maintain, and remove silt fencing and stakes', unit:'LF', type:'', cats:['restoration']},
+  {code:'T196', desc:'Furnish, install, maintain, and remove hay bales', unit:'EA', type:'', cats:['restoration']},
+
+  // ── SAW CUT ──
+  {code:'T11',  desc:'Local Law #14 cutback and restoration — cutback 6", epoxy bonding agent, saw cut additional 12", compaction testing, DOT coordination', unit:'LF', type:'Micro', cats:['saw-cut']},
+  {code:'T14',  desc:'Compaction testing and submission of test results certified by PE', unit:'EA', type:'Micro', cats:['saw-cut']},
+  {code:'T33A', desc:'Bevel cut concrete base, furnish and install dowels, asphalt cutback per Local Law #14 and NYC DOT H-1042C', unit:'LF', type:'Incremental', cats:['saw-cut']},
+  {code:'T35',  desc:'Saw cut all types of roadways and sidewalks, all depths inclusive', unit:'LF', type:'Micro', cats:['saw-cut']},
+
+  // ── EXCAVATION ──
+  {code:'T40A', desc:'Earth excavation only by machine and hand', unit:'CY', type:'Micro', cats:['excavation']},
+  {code:'T40B', desc:'Backfill only by machine and hand', unit:'CY', type:'Micro', cats:['excavation']},
+  {code:'T43',  desc:'Earth excavation by machine and hand — haul away and disposal, furnish approved fill and backfill', unit:'CY', type:'Micro', cats:['excavation']},
+  {code:'T44',  desc:'Same as T43 except 100% of excavation is performed by hand', unit:'CY', type:'Micro', cats:['excavation']},
+  {code:'T43REV1', desc:'Macro excavation — test pits and wingbacks where no facilities have been installed', unit:'CY', type:'Macro', cats:['excavation']},
+  {code:'T43REV2', desc:'Macro excavation — additional or deeper excavation not covered by other items, approved by CAR', unit:'CY', type:'Macro', cats:['excavation']},
+  {code:'T46',  desc:'All-Inclusive Trench — depth 3.0 feet and less', unit:'LF', type:'Macro', cats:['excavation']},
+  {code:'T46B', desc:'Same as T46 — excavation in unpaved areas and up to 4 conduits', unit:'LF', type:'Macro', cats:['excavation']},
+  {code:'T46D', desc:'Incremental to linear foot items for each additional conduit', unit:'LF', type:'Macro', cats:['excavation']},
+  {code:'T47',  desc:'All-Inclusive Trench — depth 3.1 feet through 4.9 feet', unit:'LF', type:'Macro', cats:['excavation']},
+  {code:'T47L', desc:'All-Inclusive Trench — depth 5.0 feet through 8.0 feet', unit:'LF', type:'Macro', cats:['excavation']},
+  {code:'T49A', desc:'Excavate up to 4 CY 100% by hand to expose live cable — sand backfill, landscaping', unit:'EA', type:'Macro', cats:['excavation']},
+  {code:'T49B', desc:'Same as T49A — excavations 4.1 CY to 8.0 CY', unit:'EA', type:'Macro', cats:['excavation']},
+  {code:'T50',  desc:'Rock excavation — all breaking methods other than hoe ram or line drilling', unit:'CY', type:'Incremental', cats:['excavation','gas-main','gas-service'], note:'HVI — Photo with placard REQUIRED before backfill'},
+  {code:'T50S', desc:'Up to 300 linear feet of snow and ice removal from work site', unit:'EA', type:'Incremental', cats:['excavation']},
+  {code:'T51',  desc:'Rock excavation utilizing line drilling or splitting method', unit:'CY', type:'Incremental', cats:['excavation','gas-main','gas-service'], note:'HVI — Photo with placard REQUIRED before backfill'},
+  {code:'T51H', desc:'Rock excavation utilizing hoe ram', unit:'CY', type:'Incremental', cats:['excavation','gas-main','gas-service'], note:'HVI — Photo with placard REQUIRED before backfill'},
+  {code:'T52',  desc:'Removal of intact rock and boulders greater than ½ cubic yard', unit:'CY', type:'Incremental', cats:['excavation','gas-main','gas-service']},
+  {code:'T53',  desc:'Intact masonry, abandoned ducts/encasements, abandoned structures, double roadway', unit:'CY', type:'Incremental', cats:['excavation']},
+  {code:'T53B', desc:'Partial breakout of service box or manhole — includes cable maintenance and conduit removal', unit:'CY', type:'Incremental', cats:['excavation']},
+  {code:'T54',  desc:'Duct enclosures, conduit encasements, wooden ducts and ducts with live cables — maintain and support cable', unit:'CY', type:'Incremental', cats:['excavation']},
+  {code:'T55',  desc:'Concrete and masonry in trolley track area including structural members and burning', unit:'CY', type:'Incremental', cats:['excavation']},
+  {code:'T57',  desc:'All types of wood ties in trolley track area', unit:'EA', type:'Incremental', cats:['excavation']},
+  {code:'T59',  desc:'Trolley track rails including any required burning', unit:'LF', type:'Incremental', cats:['excavation']},
+  {code:'T70',  desc:'Cut, remove and dispose of 1" through 8" metallic, wood or plastic pipe', unit:'LF', type:'Incremental', cats:['excavation']},
+  {code:'T70A', desc:'Same as T70 — pipe sizes greater than 8" up to 16"', unit:'LF', type:'Incremental', cats:['excavation']},
+  {code:'T70B', desc:'Same as T70 — pipe sizes greater than 16"', unit:'LF', type:'Incremental', cats:['excavation']},
+  {code:'T90',  desc:'Truck and store backfill material away from site and return when required', unit:'CY', type:'', cats:['excavation']},
+  {code:'T91',  desc:'Furnish and deliver Type I or II clean earth backfill per EO-8085, EO-1181 or G-8005', unit:'CY', type:'', cats:['excavation']},
+  {code:'T92',  desc:'Furnish and deliver sand backfill per EO-8085', unit:'CY', type:'', cats:['excavation']},
+  {code:'T93',  desc:'Furnish and deliver controlled density material (CDF)', unit:'CY', type:'', cats:['excavation']},
+  {code:'GT93', desc:'Same as T93 — incremental to items that include clean/sand fill', unit:'CY', type:'Incremental', cats:['excavation']},
+  {code:'T94',  desc:'Furnish and deliver material conforming to NYS Specification Item #4', unit:'CY', type:'', cats:['excavation']},
+  {code:'GT94', desc:'Same as T94 — incremental to items that include clean/sand fill', unit:'CY', type:'Incremental', cats:['excavation']},
+  {code:'T95',  desc:'Truck from site and dispose of excavated material (not rock, boulders, or masonry)', unit:'CY', type:'', cats:['excavation']},
+  {code:'T96',  desc:'Furnish and deliver crushed stone', unit:'CY', type:'', cats:['excavation']},
+  {code:'T101', desc:'Furnish, install, and remove approved upright solid sheeting', unit:'SF', type:'', cats:['excavation','gas-main','gas-service']},
+  {code:'T101A',desc:'Furnish, install, and remove lag sheeting per approved PE design', unit:'SF', type:'', cats:['excavation','gas-main','gas-service']},
+  {code:'T102', desc:'Furnish, install, and remove plywood sheeting per approved PE design', unit:'SF', type:'', cats:['excavation','gas-main','gas-service']},
+  {code:'T103', desc:'Furnish and install tongue and groove pressure treated sheeting', unit:'SF', type:'Incremental', cats:['excavation']},
+  {code:'T104', desc:'Same as T103 except sheeting is removed', unit:'SF', type:'Incremental', cats:['excavation']},
+  {code:'T105', desc:'Furnish, install, and remove steel or aluminum sheeting box', unit:'SF', type:'', cats:['excavation','gas-main','gas-service']},
+  {code:'T110', desc:'Furnish, place, secure, maintain, protect, and remove skid-resistant steel plates for 30 calendar days', unit:'SF', type:'', cats:['excavation','gas-main','gas-service']},
+  {code:'T112A',desc:'Strap weld plates and maintain straps for up to 30 days — up to 15 straps. Incremental to LF items and T110.', unit:'EA', type:'Incremental', cats:['excavation','gas-main','gas-service']},
+  {code:'T114', desc:'Road plate rental and maintenance per 30-day interval after 30 unworkable days', unit:'SF', type:'', cats:['excavation']},
+  {code:'T117', desc:'Furnish, place, secure, maintain, protect and remove sidewalk bridging for 30 calendar days', unit:'SF', type:'', cats:['excavation']},
+  {code:'T118', desc:'Same as T114 except for wooden sidewalk bridging', unit:'SF', type:'', cats:['excavation']},
+  {code:'T122', desc:'Furnish, install and remove up to 50 feet of temporary electric shunt protection — maintain for 2 weeks', unit:'EA', type:'', cats:['excavation']},
+  {code:'T122A',desc:'Additional footage of shunt protection beyond 50 feet covered by T122', unit:'LF', type:'', cats:['excavation']},
+  {code:'T125', desc:'Excavate test pit — 4.0 CY or less', unit:'EA', type:'', cats:['excavation']},
+  {code:'T126', desc:'Excavate test pit — 4.1 CY to 8.0 CY', unit:'EA', type:'', cats:['excavation']},
+  {code:'T127', desc:'Excavate test pit — 8.1 CY to 15.0 CY', unit:'EA', type:'', cats:['excavation']},
+  {code:'T128', desc:'Excavate test pit — 15.1 CY to 25.0 CY', unit:'EA', type:'', cats:['excavation']},
+  {code:'T129TB', desc:'Test boring up to and including 40 feet in depth per EO-6209 — full flag restoration included', unit:'EA', type:'Macro', cats:['excavation']},
+  {code:'T129TBA',desc:'Additional 5 foot increments of boring depth beyond 40 feet — incremental to T129TB', unit:'EA', type:'Incremental', cats:['excavation']},
+  {code:'T200', desc:'Lump Sum Trench — all T46 activities on layouts 30 feet or less. Not used if structure being installed.', unit:'EA', type:'Macro', cats:['excavation']},
+  {code:'T200A',desc:'Same as T200 on a protected street with all DOT requirements', unit:'EA', type:'Macro', cats:['excavation']},
+  {code:'T210', desc:'Continuous excavation or structure dewatering — up to two 4" pumps', unit:'HR', type:'', cats:['excavation']},
+  {code:'T211', desc:'Mobilize full crew (on/returning from Company work) within 2 hours', unit:'EA', type:'', cats:['excavation']},
+  {code:'T211BH',desc:'Mobilize backhoe, operator and laborer within 2 hours for emergency plate opening and closing', unit:'EA', type:'', cats:['excavation']},
+  {code:'T215', desc:'Mobilize full crew (NOT on Company work) within 4 hours', unit:'EA', type:'', cats:['excavation']},
+  {code:'T215BH',desc:'Mobilize supervisor/foreman, backhoe, operator and laborer (NOT on Company work) within 4 hours', unit:'EA', type:'', cats:['excavation']},
+
+  // ── ELECTRIC ──
+  {code:'T180', desc:'Install 2" through 6" conduit (steel, precast, PVC, HDPE)', unit:'LF', type:'Micro', cats:['electric']},
+  {code:'T181A',desc:'Rod, Mandrel and Rope up to 4 conduits', unit:'EA', type:'Micro', cats:['electric']},
+  {code:'T182', desc:'Install 2" through 6" FRE conduit with concrete encasement per EO-16646-C', unit:'CY', type:'Micro', cats:['electric']},
+  {code:'T183', desc:'Split and install 4" through 6" split conduit', unit:'LF', type:'Micro', cats:['electric']},
+  {code:'T185', desc:'Install one 2" HDPE conduit — trenchless, piercing method', unit:'LF', type:'Micro', cats:['electric']},
+  {code:'T185A',desc:'Install two 2" HDPE conduits — trenchless, piercing method', unit:'LF', type:'Micro', cats:['electric']},
+  {code:'T186A',desc:'Install one 4" or 6" HDPE conduit — trenchless, piercing method', unit:'LF', type:'Micro', cats:['electric']},
+  {code:'T186B',desc:'Install two 4" or 6" HDPE conduits — trenchless, piercing or boring', unit:'LF', type:'Micro', cats:['electric']},
+  {code:'T188', desc:'Install complete 2" through 6" riser pipe and bend to overhead poles', unit:'EA', type:'', cats:['electric']},
+  {code:'T188S',desc:'Install up to 6" bends, vents, and associated piping to switch gear cabinet', unit:'EA', type:'', cats:['electric']},
+
+  // ── GAS SERVICE — BRONX/QUEENS (suffix 2 = ≤50ft or >50ft) ──
+  {code:'G2AI',  desc:'Gas Service Full Install — 1.25 CTS through 2" IPS | Plastic | ≤50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (≤50 ft)'},
+  {code:'G2AII', desc:'Gas Service Full Install — 1.25 CTS through 2" IPS | Plastic | >50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (>50 ft)'},
+  {code:'G2AIS', desc:'Gas Service Full Install — 1.25 CTS through 2" IPS | Steel | ≤50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (≤50 ft)'},
+  {code:'G2AIIS',desc:'Gas Service Full Install — 1.25 CTS through 2" IPS | Steel | >50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (>50 ft)'},
+  {code:'G2BI',  desc:'Gas Service Full Install — 3" IPS through 4" IPS | Plastic | ≤50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (≤50 ft)'},
+  {code:'G2BII', desc:'Gas Service Full Install — 3" IPS through 4" IPS | Plastic | >50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (>50 ft)'},
+  {code:'G2BIS', desc:'Gas Service Full Install — 3" IPS through 4" IPS | Steel | ≤50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (≤50 ft)'},
+  {code:'G2BIIS',desc:'Gas Service Full Install — 3" IPS through 4" IPS | Steel | >50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (>50 ft)'},
+  {code:'G2CI',  desc:'Gas Service Full Install — 6" IPS through 8" IPS | Plastic | ≤50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (≤50 ft)'},
+  {code:'G2CII', desc:'Gas Service Full Install — 6" IPS through 8" IPS | Plastic | >50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (>50 ft)'},
+  {code:'G2DI',  desc:'Gas Service Full Install — 10" IPS through 12" IPS | Plastic | ≤50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (≤50 ft)'},
+  {code:'G2DII', desc:'Gas Service Full Install — 10" IPS through 12" IPS | Plastic | >50 ft — Bronx/Queens', unit:'EA', type:'Macro', cats:['gas-service'], note:'Bronx/Queens territory (>50 ft)'},
+  // Manhattan (suffix 1 = ≤30ft or >30ft)
+  {code:'G1AI',  desc:'Gas Service Full Install — 1.25 CTS through 2" IPS | Plastic | ≤30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (≤30 ft)'},
+  {code:'G1AII', desc:'Gas Service Full Install — 1.25 CTS through 2" IPS | Plastic | >30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (>30 ft)'},
+  {code:'G1AIS', desc:'Gas Service Full Install — 1.25 CTS through 2" IPS | Steel | ≤30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (≤30 ft)'},
+  {code:'G1AIIS',desc:'Gas Service Full Install — 1.25 CTS through 2" IPS | Steel | >30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (>30 ft)'},
+  {code:'G1BI',  desc:'Gas Service Full Install — 3" IPS through 4" IPS | Plastic | ≤30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (≤30 ft)'},
+  {code:'G1BII', desc:'Gas Service Full Install — 3" IPS through 4" IPS | Plastic | >30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (>30 ft)'},
+  {code:'G1BIS', desc:'Gas Service Full Install — 3" IPS through 4" IPS | Steel | ≤30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (≤30 ft)'},
+  {code:'G1BIIS',desc:'Gas Service Full Install — 3" IPS through 4" IPS | Steel | >30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (>30 ft)'},
+  {code:'G1CI',  desc:'Gas Service Full Install — 6" IPS through 8" IPS | Plastic | ≤30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (≤30 ft)'},
+  {code:'G1CII', desc:'Gas Service Full Install — 6" IPS through 8" IPS | Plastic | >30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (>30 ft)'},
+  {code:'G1CIS', desc:'Gas Service Full Install — 6" IPS through 8" IPS | Steel | ≤30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (≤30 ft)'},
+  {code:'G1CIIS',desc:'Gas Service Full Install — 6" IPS through 8" IPS | Steel | >30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (>30 ft)'},
+  {code:'G1DI',  desc:'Gas Service Full Install — 10" IPS through 12" IPS | Plastic | ≤30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (≤30 ft)'},
+  {code:'G1DII', desc:'Gas Service Full Install — 10" IPS through 12" IPS | Plastic | >30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (>30 ft)'},
+  {code:'G1DIS', desc:'Gas Service Full Install — 10" IPS through 12" IPS | Steel | ≤30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (≤30 ft)'},
+  {code:'G1DIIS',desc:'Gas Service Full Install — 10" IPS through 12" IPS | Steel | >30 ft — Manhattan', unit:'EA', type:'Macro', cats:['gas-service'], note:'Manhattan territory (>30 ft)'},
+  // Westchester (suffix 3)
+  {code:'G3AI',  desc:'Gas Service Full Install — 1.25 CTS through 2" IPS | Plastic | ≤65 ft — Westchester', unit:'EA', type:'Macro', cats:['gas-service'], note:'Westchester territory (≤65 ft)'},
+  {code:'G3AII', desc:'Gas Service Full Install — 1.25 CTS through 2" IPS | Plastic | >65 ft — Westchester', unit:'EA', type:'Macro', cats:['gas-service'], note:'Westchester territory (>65 ft)'},
+  {code:'G3BI',  desc:'Gas Service Full Install — 3" IPS through 4" IPS | Plastic | ≤65 ft — Westchester', unit:'EA', type:'Macro', cats:['gas-service'], note:'Westchester territory (≤65 ft)'},
+  {code:'G3BII', desc:'Gas Service Full Install — 3" IPS through 4" IPS | Plastic | >65 ft — Westchester', unit:'EA', type:'Macro', cats:['gas-service'], note:'Westchester territory (>65 ft)'},
+  {code:'G3CI',  desc:'Gas Service Full Install — 6" IPS through 8" IPS | Plastic | ≤65 ft — Westchester', unit:'EA', type:'Macro', cats:['gas-service'], note:'Westchester territory (≤65 ft)'},
+  {code:'G3CII', desc:'Gas Service Full Install — 6" IPS through 8" IPS | Plastic | >65 ft — Westchester', unit:'EA', type:'Macro', cats:['gas-service'], note:'Westchester territory (>65 ft)'},
+  {code:'G3DI',  desc:'Gas Service Full Install — 10" IPS through 12" IPS | Plastic | ≤65 ft — Westchester', unit:'EA', type:'Macro', cats:['gas-service'], note:'Westchester territory (≤65 ft)'},
+  {code:'G3DII', desc:'Gas Service Full Install — 10" IPS through 12" IPS | Plastic | >65 ft — Westchester', unit:'EA', type:'Macro', cats:['gas-service'], note:'Westchester territory (>65 ft)'},
+  // Lump Sum
+  {code:'GT200A', desc:'Lump sum — ≤4" PE Service, territory length or less, no main cut-out/extension required', unit:'EA', type:'Macro', cats:['gas-service'], note:'Commonly used for New Business Service'},
+  {code:'GT200AS',desc:'Lump sum — ≤4" Steel Service, territory length or less', unit:'EA', type:'Macro', cats:['gas-service'], note:'Commonly used for New Business Service'},
+  {code:'GT200B', desc:'Lump sum — ≥6" PE Service, territory length or less', unit:'EA', type:'Macro', cats:['gas-service'], note:'Commonly used for New Business Service'},
+  {code:'GT200BS',desc:'Lump sum — ≥6" Steel Service, territory length or less', unit:'EA', type:'Macro', cats:['gas-service'], note:'Commonly used for New Business Service'},
+  // High Pressure Insertions
+  {code:'G4JI',  desc:'Partial Service Insertion HP — 0.5" CTS | 20 feet or less | High Pressure', unit:'EA', type:'Macro', cats:['gas-service']},
+  {code:'G4KI',  desc:'Partial Service Insertion HP — 1" CTS through 1.25" IPS | 20 feet or less | High Pressure', unit:'EA', type:'Macro', cats:['gas-service']},
+  {code:'G4LI',  desc:'Partial Service Insertion HP — 2" IPS | 20 feet or less | High Pressure', unit:'EA', type:'Macro', cats:['gas-service']},
+  {code:'G4AI',  desc:'Service Insertion HP — 0.5" CTS | Plastic | Territory length or less', unit:'EA', type:'Macro', cats:['gas-service']},
+  {code:'G4BI',  desc:'Service Insertion HP — 1" CTS through 1.25" CTS | Plastic | Territory length or less', unit:'EA', type:'Macro', cats:['gas-service']},
+  {code:'G4CI',  desc:'Service Insertion HP — 2" IPS | Plastic | Territory length or less', unit:'EA', type:'Macro', cats:['gas-service']},
+  // New Business
+  {code:'G5AI',  desc:'Gas Service — 1.25 CTS through 2" IPS | Plastic | New Business | All inclusive up to territory length', unit:'EA', type:'Macro', cats:['gas-service']},
+  {code:'G5BI',  desc:'Gas Service — 3" IPS through 4" IPS | Plastic | New Business | All inclusive up to territory length', unit:'EA', type:'Macro', cats:['gas-service']},
+  {code:'G5CI',  desc:'Gas Service — 6" IPS through 8" IPS | Plastic | New Business | All inclusive up to territory length', unit:'EA', type:'Macro', cats:['gas-service']},
+  // Other service items
+  {code:'G7A',   desc:'Curb Valve Cut-In 0.5" through 2" copper or plastic — With Restoration', unit:'EA', type:'', cats:['gas-service']},
+  {code:'G7B',   desc:'Curb Valve Cut-In 0.5" through 2" copper or plastic — Without Restoration', unit:'EA', type:'', cats:['gas-service']},
+  {code:'GT9A',  desc:'Cut and Cap Gas Service — 0.5" CTS to 2" IPS', unit:'EA', type:'', cats:['gas-service']},
+  {code:'GT9B',  desc:'Cut and Cap Gas Service — 3" IPS to 4" IPS', unit:'EA', type:'', cats:['gas-service']},
+  {code:'G10A',  desc:'Cut and Cap Service — No Excavation, 0.5" CTS to 2" IPS', unit:'EA', type:'', cats:['gas-service']},
+  {code:'G10B',  desc:'Cut and Cap Service — No Excavation, 3" IPS to 4" IPS', unit:'EA', type:'', cats:['gas-service']},
+  {code:'GT11',  desc:'Cold Rolled Bend — solid sleeved elbow ≤2", vent line, boring, cathodic protection', unit:'EA', type:'', cats:['gas-service']},
+  {code:'G13',   desc:'Meter and Regulator Set — Inside Set', unit:'EA', type:'', cats:['gas-service']},
+  {code:'G13R',  desc:'Meter and Regulator Set — Outside Set', unit:'EA', type:'', cats:['gas-service']},
+  {code:'G14',   desc:'Install Steel Bumpers', unit:'EA', type:'', cats:['gas-service']},
+  {code:'G16A',  desc:'Reconnect Inactive Service — Up to 2" IPS', unit:'EA', type:'', cats:['gas-service']},
+  {code:'G16B',  desc:'Reconnect Inactive Service — 3" IPS to 4" IPS', unit:'EA', type:'', cats:['gas-service']},
+  {code:'G16C',  desc:'Reconnect Inactive Service — 6" IPS', unit:'EA', type:'', cats:['gas-service']},
+  {code:'G20',   desc:'Additional Pipe Work >6 feet per meter set for new or replaced services', unit:'LF', type:'', cats:['gas-service']},
+  {code:'G20A',  desc:'Relocate Meter Set — up to 3-meter set, boring/point of entry. G20 incremental if >6 feet pipe.', unit:'EA', type:'', cats:['gas-service']},
+  {code:'GT32A', desc:'Relighting — In conjunction with service', unit:'EA', type:'', cats:['gas-service']},
+  {code:'GT32B', desc:'Relighting — Stand alone', unit:'EA', type:'', cats:['gas-service']},
+  {code:'GT36AA',desc:'Core Drill Through Foundation Wall — 2" through 4" sleeve', unit:'EA', type:'', cats:['gas-service']},
+  {code:'GT36AB',desc:'Core Drill Through Foundation Wall — 6" through 8" sleeve', unit:'EA', type:'', cats:['gas-service']},
+  {code:'GT36B', desc:'Core Drill Through Foundation Wall — 10" and above sleeve', unit:'EA', type:'', cats:['gas-service']},
+  {code:'GT92',  desc:'Coal Tar Removal', unit:'LF', type:'', cats:['gas-service','gas-main'], note:'Appears in both Gas Main and Gas Service — verify section before billing'},
+
+  // ── GAS MAIN ──
+  {code:'G26A',  desc:'Gas Main Install — Up to 4" Plastic, Roadway (Asphalt/Concrete)', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G26B',  desc:'Gas Main Install — 6" through 8" Plastic, Roadway', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G26C',  desc:'Gas Main Install — 10" through 12" Plastic, Roadway', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G26D',  desc:'Gas Main Install — 16" through 20" Plastic, Roadway', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G26AA', desc:'Gas Main Install — Up to 4" Plastic, Asphalt Only', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G26AWK',desc:'Gas Main Install — Up to 4" Plastic, Sidewalk/Earth', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G26AE', desc:'Gas Main Install — Up to 4" Plastic, Earth Only', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G26AS', desc:'Gas Main Install — Up to 4" Steel, Roadway', unit:'LF', type:'Macro', cats:['gas-main'], note:'Welds NOT included in LF price — bill separately under GT90A–GT90F'},
+  {code:'G27A',  desc:'Gas Main Install — Open Trench, 2" through 4" Plastic', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G27B',  desc:'Gas Main Install — Open Trench, 6" through 8" Plastic', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G27C',  desc:'Gas Main Install — Open Trench, 10" through 12" Plastic', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G27D',  desc:'Gas Main Install — Open Trench, 16" through 20" Plastic', unit:'LF', type:'Macro', cats:['gas-main']},
+  {code:'G27AS', desc:'Gas Main Install — Open Trench, 2" through 4" Steel', unit:'LF', type:'Macro', cats:['gas-main'], note:'Welds NOT included in LF price — bill separately under GT90A–GT90F'},
+  {code:'GT18A', desc:'Gas Main Cut-Out/Tie-In — Up to 4" Plastic', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT18B', desc:'Gas Main Cut-Out/Tie-In — 6" through 8" Plastic', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT18C', desc:'Gas Main Cut-Out/Tie-In — 10" through 12" Plastic', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT18D', desc:'Gas Main Cut-Out/Tie-In — 16" through 20" Plastic', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT18AS',desc:'Gas Main Cut-Out/Tie-In — Up to 4" Steel', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT18BS',desc:'Gas Main Cut-Out/Tie-In — 6" through 8" Steel', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT18CS',desc:'Gas Main Cut-Out/Tie-In — 10" through 12" Steel', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT18DS',desc:'Gas Main Cut-Out/Tie-In — 16" through 20" Steel', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT18ES',desc:'Gas Main Cut-Out/Tie-In — 24" through 30" Steel', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'G18',   desc:'Gas Main/Service Bypass', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT19A', desc:'Gas Main Extension Tie-In — Up to 4" Plastic', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT19B', desc:'Gas Main Extension Tie-In — 6" through 8" Plastic', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT19C', desc:'Gas Main Extension Tie-In — 10" through 12" Plastic', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT19D', desc:'Gas Main Extension Tie-In — 16" through 20" Plastic', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT19AS',desc:'Gas Main Extension Tie-In — Up to 4" Steel', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT19BS',desc:'Gas Main Extension Tie-In — 6" through 8" Steel', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT19CS',desc:'Gas Main Extension Tie-In — 10" through 12" Steel', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT19DS',desc:'Gas Main Extension Tie-In — 16" through 20" Steel', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT19ES',desc:'Gas Main Extension Tie-In — 24" through 30" Steel', unit:'EA', type:'Macro', cats:['gas-main']},
+  {code:'GT31A', desc:'Service Transfer — No Excavation, 2" or smaller Plastic/Copper', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT31B', desc:'Service Transfer — No Excavation, 3" through 4" Plastic/Copper', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT31C', desc:'Service Transfer — No Excavation, 6" through 8" Plastic/Copper', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT31D', desc:'Service Transfer — No Excavation, 10" through 12" Plastic/Copper', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT42A', desc:'Main Offset — Up to 4" Plastic (2+ elbows not prefabricated, up to 4 fuses, pipe billed separately)', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT42B', desc:'Main Offset — 6" through 8" Plastic', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT42C', desc:'Main Offset — 10" through 12" Plastic', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT42D', desc:'Main Offset — 16" Plastic', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT42AS',desc:'Main Offset — Up to 4" Steel', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT42BS',desc:'Main Offset — 6" through 8" Steel', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT42CS',desc:'Main Offset — 10" through 12" Steel', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT10CM',desc:'Cut and Cap Main — No Excavation, 2" through 4"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT10DM',desc:'Cut and Cap Main — No Excavation, 6" through 8"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT10EM',desc:'Cut and Cap Main — No Excavation, 10" through 12"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT10FM',desc:'Cut and Cap Main — No Excavation, 16" or larger', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT35A', desc:'Install/Remove Sleeve (Style-50/80/Green Sleeve) — 8" or smaller', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT35B', desc:'Install/Remove Sleeve — 10" through 16"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT35C', desc:'Install/Remove Sleeve — Greater than 16"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT75',  desc:'Install Tapping Tee — Weld on Main, 1" through 2" (up to 2 welds, OQ welder required)', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT76',  desc:'Install Tapping Tee — Weld on Main, 3" through 4"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT77',  desc:'Install Tapping Tee — Weld on Main, 6" through 8"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT78',  desc:'Install Tapping Tee — Weld on Main, 10" through 12"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT79',  desc:'Install Tapping Tee — Weld on Sleeve, 3" through 4"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT80',  desc:'Install Tapping Tee — Weld on Sleeve, 6" through 8"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT81',  desc:'Install Tapping Tee — Weld on Sleeve, 10" through 12"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT90A', desc:'Steel Weld — Up to 4" (per weld, not per fitting)', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT90B', desc:'Steel Weld — 6" through 8"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT90C', desc:'Steel Weld — 10" through 12"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT90D', desc:'Steel Weld — 16" through 20"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT90E', desc:'Steel Weld — 24" through 30"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT90F', desc:'Steel Weld — 36"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G23A',  desc:'Adams Clamp Installation Open Excavation — 2" through 4"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G23B',  desc:'Adams Clamp Installation Open Excavation — 6" through 8"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G23C',  desc:'Adams Clamp Installation Open Excavation — 10" through 12"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G24A',  desc:'Joint Encapsulation Open Excavation — 4" through 8"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G24B',  desc:'Joint Encapsulation Open Excavation — 10" through 12"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G24C',  desc:'Joint Encapsulation Open Excavation — 16" through 20"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G24D',  desc:'Joint Encapsulation Open Excavation — 24"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G24E',  desc:'Joint Encapsulation Open Excavation — 30"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G24F',  desc:'Joint Encapsulation Open Excavation — 36"', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G43A',  desc:'Gas Excavation — Roadway', unit:'CY', type:'Macro', cats:['gas-main']},
+  {code:'G43B',  desc:'Gas Excavation — Earth', unit:'CY', type:'Macro', cats:['gas-main']},
+  {code:'G44',   desc:'Dry Hole with Backfill — standard 4\'×4\'×5\' excavation, probe 2\' all directions', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G45A',  desc:'Gas Excavation Enlargement — 0.1 to 4.0 CY (only when requested by Gas Operations)', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G45B',  desc:'Gas Excavation Enlargement — 4.1 to 8.0 CY', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G45C',  desc:'Gas Excavation Enlargement — 8.1 to 15.0 CY', unit:'EA', type:'', cats:['gas-main']},
+  {code:'G45D',  desc:'Gas Excavation Enlargement — 15.1 to 25.0 CY', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8AC', desc:'Window Cut-Out on Previously Inserted Main — 2" through 4" Cast Iron', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8AS', desc:'Window Cut-Out on Previously Inserted Main — 2" through 4" Steel', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8AP', desc:'Window Cut-Out on Previously Inserted Main — 2" through 4" Plastic', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8BC', desc:'Window Cut-Out on Previously Inserted Main — 6" through 8" Cast Iron', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8BS', desc:'Window Cut-Out on Previously Inserted Main — 6" through 8" Steel', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8BP', desc:'Window Cut-Out on Previously Inserted Main — 6" through 8" Plastic', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8CC', desc:'Window Cut-Out on Previously Inserted Main — 10" through 12" Cast Iron', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8CS', desc:'Window Cut-Out on Previously Inserted Main — 10" through 12" Steel', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8CP', desc:'Window Cut-Out on Previously Inserted Main — 10" through 12" Plastic', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8DC', desc:'Window Cut-Out on Previously Inserted Main — 16" through 20" Cast Iron', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8DS', desc:'Window Cut-Out on Previously Inserted Main — 16" through 20" Steel', unit:'EA', type:'', cats:['gas-main']},
+  {code:'GT8E',  desc:'Window Cut-Out on Previously Inserted Main — 24" through 36" Cast Iron', unit:'EA', type:'', cats:['gas-main']},
+
+  // ── GAS LEAK ──
+  {code:'GK1A',  desc:'Encapsulate Joints/Plugs LP/MP — 4" through 8" — Asphalt/Concrete Surface', unit:'EA', type:'Macro', cats:['gas-leak']},
+  {code:'GK1B',  desc:'Encapsulate Joints/Plugs LP/MP — 4" through 8" — Concrete Only', unit:'EA', type:'Macro', cats:['gas-leak']},
+  {code:'GK1C',  desc:'Encapsulate Joints/Plugs LP/MP — 4" through 8" — Earth', unit:'EA', type:'Macro', cats:['gas-leak']},
+  {code:'GK2A',  desc:'Encapsulate Joints/Plugs LP/MP — 10" through 12" — Asphalt/Concrete', unit:'EA', type:'Macro', cats:['gas-leak']},
+  {code:'GK3A',  desc:'Encapsulate Joints/Plugs LP/MP — 16" through 24" — Asphalt/Concrete', unit:'EA', type:'Macro', cats:['gas-leak']},
+  {code:'GK4A',  desc:'Encapsulate Joints/Plugs LP/MP — 30" through 36" — Asphalt/Concrete', unit:'EA', type:'Macro', cats:['gas-leak']},
+  {code:'GK5A',  desc:'Encapsulate Drip Pots/Mechanical Joints/End Caps — 4" through 8" — Asphalt/Concrete', unit:'EA', type:'Macro', cats:['gas-leak']},
+  {code:'GK6A',  desc:'Encapsulate Drip Pots/Mechanical Joints/End Caps — 10" through 12" — Asphalt/Concrete', unit:'EA', type:'Macro', cats:['gas-leak']},
+  {code:'GK11A', desc:'Encapsulate Dresser Coupling/Split Sleeve ≤8" long — 4" through 8" — Asphalt/Concrete', unit:'EA', type:'Macro', cats:['gas-leak']},
+  {code:'GK15A', desc:'Encapsulate Dresser Coupling/Split Sleeve >8" long — 4" through 8" — Asphalt/Concrete', unit:'EA', type:'Macro', cats:['gas-leak']},
+  {code:'GK19AC',desc:'Vacuum Test Pit — <1 CY — Asphalt/Concrete', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK19AE',desc:'Vacuum Test Pit — <1 CY — Earth', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK19BC',desc:'Vacuum Test Pit — 1 to 2 CY — Asphalt/Concrete', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK19BE',desc:'Vacuum Test Pit — 1 to 2 CY — Earth', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK19CC',desc:'Vacuum Test Pit — 2.1 to 3 CY — Asphalt/Concrete', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK19CE',desc:'Vacuum Test Pit — 2.1 to 3 CY — Earth', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK44A', desc:'Vacuum Dry Hole — Asphalt/Concrete Surface', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK44B', desc:'Vacuum Dry Hole — Concrete Only Surface', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK44C', desc:'Vacuum Dry Hole — Earth', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK9A',  desc:'Cut and Cap Service — 0.5" through 2" — Asphalt/Concrete Surface', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK9AC', desc:'Cut and Cap Service — 0.5" through 2" — Concrete Only', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK9AE', desc:'Cut and Cap Service — 0.5" through 2" — Earth', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GK9B',  desc:'Cut and Cap Service — 3" through 4" — Asphalt/Concrete', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GC20A', desc:'Core Drill Opening — Asphalt/Concrete Road', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'GC20B', desc:'Core Drill Opening — Asphalt Only', unit:'EA', type:'', cats:['gas-leak']},
+  {code:'G50',   desc:'Leak investigation and repair — per supervisor direction', unit:'EA', type:'Macro', cats:['gas-leak']},
+
+  // ── MISC ──
+  {code:'T350',  desc:'T&E — Miscellaneous Work — Stand Alone item billed at 1.0× stipulation value', unit:'EA', type:'Stand Alone', cats:['misc'], note:'ALWAYS billed at stip factor of 1 — do not adjust multiplier'},
+  {code:'T220',  desc:'Flagman — required by DOT or field supervisor', unit:'HR', type:'', cats:['misc']},
+  {code:'T221',  desc:'Traffic Agent — required by DOT or field supervisor', unit:'HR', type:'', cats:['misc']},
+  {code:'T234',  desc:'Maintenance and Protection of Traffic setup and removal', unit:'EA', type:'', cats:['misc']},
+  {code:'GT89A', desc:'Provide Police Escort — Single Police Officer', unit:'HR', type:'', cats:['misc']},
+  {code:'GT89B', desc:'Provide Police Escort — Two Police Officers', unit:'HR', type:'', cats:['misc']},
+  {code:'G48',   desc:'Install Service Riser — Outdoor', unit:'EA', type:'', cats:['misc']},
+  {code:'G49',   desc:'Install Service Riser — Indoor', unit:'EA', type:'', cats:['misc']},
+  {code:'GT37A', desc:'Pressure Test — Low Pressure', unit:'EA', type:'', cats:['misc']},
+  {code:'GT37B', desc:'Pressure Test — Medium Pressure', unit:'EA', type:'', cats:['misc']},
+  {code:'GT38A', desc:'Pressure Test — High Pressure, 2" or smaller', unit:'EA', type:'', cats:['misc']},
+  {code:'GT38B', desc:'Pressure Test — High Pressure, larger than 2"', unit:'EA', type:'', cats:['misc']},
+  {code:'GT40A', desc:'Abandon and Retire Service — Low Pressure', unit:'EA', type:'', cats:['misc']},
+  {code:'GT40B', desc:'Abandon and Retire Service — High Pressure', unit:'EA', type:'', cats:['misc']},
+  {code:'GT41A', desc:'Leak Survey — Low Pressure', unit:'EA', type:'', cats:['misc']},
+  {code:'GT41B', desc:'Leak Survey — High Pressure', unit:'EA', type:'', cats:['misc']},
+  {code:'CP3',   desc:'Cathodic Protection — Install sacrificial anode', unit:'EA', type:'', cats:['misc']},
+  {code:'CP4',   desc:'Cathodic Protection — Install test station', unit:'EA', type:'', cats:['misc']},
+  {code:'CP7',   desc:'Cathodic Protection — Coat and wrap exposed pipe', unit:'LF', type:'', cats:['misc']},
+  {code:'GT61',  desc:'Counter sink plates — unit equals trench edge perimeter (e.g. 8\'×6\' opening = 28 LF)', unit:'LF', type:'', cats:['excavation']},
+];
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let activeCat = 'all';
+let activeView = 'grid'; // grid | list | group
+let searchTags = []; // active tag array
+
+function matches(item, term) {
+  const t = term.toLowerCase();
+  return item.code.toLowerCase().includes(t)
+    || item.desc.toLowerCase().includes(t)
+    || (item.note && item.note.toLowerCase().includes(t))
+    || item.unit.toLowerCase().includes(t)
+    || item.type.toLowerCase().includes(t)
+    || item.cats.some(c => c.includes(t));
+}
+
+function filterItems() {
+  return ITEMS.filter(item => {
+    const catOk = activeCat === 'all' ? true
+      : activeCat === 'common' ? COMMON.has(item.code)
+      : item.cats.includes(activeCat);
+    if (!catOk) return false;
+    // match ANY tag
+    if (searchTags.length === 0) return true;
+    return searchTags.some(t => matches(item, t));
+  });
+}
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+function primaryCat(item) {
+  const order = ['gas-main','gas-service','gas-leak','excavation','restoration','saw-cut','electric','misc'];
+  for (const c of order) if (item.cats.includes(c)) return c;
+  return 'misc';
+}
+
+function catColor(cat) {
+  return CAT_META[cat]?.color || 'var(--c-misc)';
+}
+
+function typeBadgeHtml(type) {
+  if (!type) return '';
+  const map = {
+    'Macro':'tb-macro','Micro':'tb-micro',
+    'Incremental':'tb-incremental','Stand Alone':'tb-standalone'
+  };
+  return `<span class="type-badge ${map[type]||''}">${type}</span>`;
+}
+
+
+function sortItems(arr) {
+  return [...arr].sort((a,b) => a.code.localeCompare(b.code));
+}
+
+// ─────────────────────────────────────────────
+// CARD HTML
+// ─────────────────────────────────────────────
+function cardHtml(item) {
+  const isCommon = COMMON.has(item.code);
+  const pc = primaryCat(item);
+  const color = catColor(pc);
+  const catChips = item.cats.length > 1
+    ? item.cats.map(c => `<span class="cat-chip" style="background:${catColor(c)}22;color:${catColor(c)}">${CAT_META[c]?.label||c}</span>`).join('')
+    : '';
+
+  const noteHtml = item.note
+    ? `<div class="card-note">${(item.note).replace(/—/g,'&#8212;')}</div>` : '';
+  const cardDesc = (item.desc||'').replace(/—/g,'&#8212;').replace(/×/g,'&#215;');
+
+  return `<div class="card">
+    <div class="card-accent" style="background:${color}"></div>
+    <div class="card-body">
+      <div class="card-top">
+        <div class="card-code">${item.code}</div>
+        <div class="card-badges">
+          ${isCommon ? '<span class="star">⭐</span>' : ''}
+          ${typeBadgeHtml(item.type)}
+        </div>
+      </div>
+      <div class="card-desc">${cardDesc}</div>
+      ${noteHtml}
+      <div class="card-foot">
+        <span class="unit-pill">${UNIT_FULL[item.unit]||item.unit}</span>
+        <div class="cat-chips">${catChips}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────────
+// SEARCH TAGS
+// ─────────────────────────────────────────────
+function renderTags() {
+  const container = document.getElementById('searchTags');
+  if (searchTags.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = 'flex';
+  container.innerHTML = searchTags.map((t,i) =>
+    `<span class="stag">${t}<span class="stag-x" data-i="${i}">✕</span></span>`
+  ).join('');
+}
+
+function addTag(val) {
+  const trimmed = val.trim();
+  if (!trimmed || searchTags.includes(trimmed)) return;
+  searchTags.push(trimmed);
+  renderTags();
+  render();
+}
+
+function removeTag(i) {
+  searchTags.splice(i, 1);
+  renderTags();
+  render();
+}
+
+// ─────────────────────────────────────────────
+// EVENTS
+// ─────────────────────────────────────────────
+const searchInput = document.getElementById('searchInput');
+const clearBtn = document.getElementById('clearBtn');
+
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    const val = searchInput.value.trim();
+    if (val) {
+      e.preventDefault();
+      addTag(val);
+      searchInput.value = '';
+      clearBtn.classList.toggle('show', searchTags.length > 0);
+    }
+  } else if (e.key === 'Backspace' && searchInput.value === '' && searchTags.length > 0) {
+    removeTag(searchTags.length - 1);
+    clearBtn.classList.toggle('show', searchTags.length > 0);
+  }
+});
+
+// also live-filter as you type (before committing tag)
+searchInput.addEventListener('input', e => {
+  const val = e.target.value.trim();
+  clearBtn.classList.toggle('show', val.length > 0 || searchTags.length > 0);
+  // live preview: filter on current input + existing tags combined
+  render();
+});
+
+// override filterItems to also check raw input
+const _origFilter = filterItems;
+window._liveFilter = function() {
+  const liveVal = searchInput.value.trim().toLowerCase();
+  return ITEMS.filter(item => {
+    const catOk = activeCat === 'all' ? true
+      : activeCat === 'common' ? COMMON.has(item.code)
+      : item.cats.includes(activeCat);
+    if (!catOk) return false;
+    const allTerms = [...searchTags.map(t => t.toLowerCase())];
+    if (liveVal) allTerms.push(liveVal);
+    if (allTerms.length === 0) return true;
+    return allTerms.some(t => matches(item, t));
+  });
+};
+
+// patch render to use live filter
+const _origRender = render;
+function render() {
+  const filtered = sortItems(window._liveFilter());
+  document.getElementById('countNum').textContent = filtered.length;
+
+  if (activeView === 'grid') {
+    const grid = document.getElementById('itemsGrid');
+    grid.innerHTML = filtered.length
+      ? filtered.map(cardHtml).join('')
+      : `<div class="no-results"><strong>NO ITEMS FOUND</strong>Try a different search or filter</div>`;
+
+  } else if (activeView === 'list') {
+    const body = document.getElementById('listBody');
+    body.innerHTML = filtered.map(item => {
+      const pc = primaryCat(item);
+      const color = catColor(pc);
+      const isCommon = COMMON.has(item.code);
+      const noteLine = item.note ? `<div class="row-note">${item.note}</div>` : '';
+      const typeLine = item.type ? typeBadgeHtml(item.type) : '';
+      const desc = (item.desc || '').replace(/—/g, '&#8212;').replace(/×/g, '&#215;');
+      const note = (item.note || '').replace(/—/g, '&#8212;');
+      return `<div class="list-row">
+        <div class="row-accent" style="background:${color}"></div>
+        <div class="row-star">${isCommon ? '⭐' : ''}</div>
+        <div class="row-code">${item.code}</div>
+        <div class="row-body">
+          <div class="row-desc">${desc}</div>
+          <div class="row-meta">
+            <span class="row-unit">${UNIT_FULL[item.unit]||item.unit}</span>
+            ${typeLine}
+          </div>
+          ${note ? `<div class="row-note">${note}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+  } else if (activeView === 'group') {
+    const groupEl = document.getElementById('itemsGroup');
+    const groups = {};
+    filtered.forEach(item => {
+      const pc = primaryCat(item);
+      if (!groups[pc]) groups[pc] = [];
+      groups[pc].push(item);
+    });
+    const catOrder = ['gas-service','gas-main','gas-leak','excavation','restoration','saw-cut','electric','misc'];
+    let html = '';
+    for (const cat of catOrder) {
+      if (!groups[cat]?.length) continue;
+      const meta = CAT_META[cat];
+      html += `<div class="group-section">
+        <div class="group-header" style="background:${meta.color}18;border-left-color:${meta.color}">
+          <span class="group-title" style="color:${meta.color}">${meta.label}</span>
+          <span class="group-count">${groups[cat].length} items</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px">
+          ${groups[cat].map(cardHtml).join('')}
+        </div>
+      </div>`;
+    }
+    groupEl.innerHTML = html || `<div class="no-results"><strong>NO ITEMS FOUND</strong>Try a different search or filter</div>`;
+  }
+}
+
+clearBtn.addEventListener('click', () => {
+  searchInput.value = '';
+  searchTags = [];
+  clearBtn.classList.remove('show');
+  renderTags();
+  render();
+});
+
+document.getElementById('filterRow').addEventListener('click', e => {
+  const pill = e.target.closest('.fpill');
+  if (!pill) return;
+  document.querySelectorAll('.fpill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  activeCat = pill.dataset.cat;
+  render();
+});
+
+document.getElementById('searchTags').addEventListener('click', e => {
+  const x = e.target.closest('.stag-x');
+  if (!x) return;
+  removeTag(parseInt(x.dataset.i));
+  clearBtn.classList.toggle('show', searchTags.length > 0 || searchInput.value.length > 0);
+});
+
+document.getElementById('btnList').addEventListener('click', () => setView('list'));
+document.getElementById('btnGrid').addEventListener('click', () => setView('grid'));
+document.getElementById('btnGroup').addEventListener('click', () => setView('group'));
+
+// ─────────────────────────────────────────────
+// VIEW SWITCHING
+// ─────────────────────────────────────────────
+function setView(v) {
+  activeView = v;
+  const grid  = document.getElementById('itemsGrid');
+  const list  = document.getElementById('itemsList');
+  const group = document.getElementById('itemsGroup');
+  grid.style.display  = v === 'grid'  ? 'grid'  : 'none';
+  list.style.display  = v === 'list'  ? 'block' : 'none';
+  group.style.display = v === 'group' ? 'block' : 'none';
+  document.getElementById('btnGrid').classList.toggle('active', v==='grid');
+  document.getElementById('btnList').classList.toggle('active', v==='list');
+  document.getElementById('btnGroup').classList.toggle('active', v==='group');
+  render();
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+setView('list');
+</script>
+</body>
+</html>
