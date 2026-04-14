@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charging Guide — XCMG</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#181b23;--panel:#1e2130;--border:#2a2e3d;
+  --border2:#363b50;--text:#e8eaf0;--muted:#7b82a0;--dim:#4a5068;
+  --coned:#4ab3e8;
+  --c-capital:#4ab3e8;
+  --c-om:#48c98e;
+  --c-ret:#ff5f5f;
+  --c-common:#ffd04b;
+  --radius:6px;
+  --font:-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:"SF Mono","Cascadia Code","Consolas",monospace;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;}
+
+/* NAV */
+.sitenav{background:#07090f;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:4px;padding:0 16px;height:38px;overflow-x:auto;position:sticky;top:0;z-index:100;-webkit-overflow-scrolling:touch;}
+.sitenav::-webkit-scrollbar{display:none;}
+.sitenav a{color:var(--muted);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 10px;height:38px;display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.15s;}
+.sitenav a:hover{color:var(--text);}
+.sitenav a.active{color:var(--coned);border-bottom-color:var(--coned);}
+.nav-divider{width:1px;height:18px;background:var(--border2);flex-shrink:0;margin:0 4px;}
+
+/* HEADER */
+.header{background:#0a0c12;border-bottom:2px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:12px;height:52px;}
+.logo{background:var(--coned);color:#000;font-weight:800;font-size:13px;letter-spacing:2px;padding:5px 10px;border-radius:3px;flex-shrink:0;}
+.header-title{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);opacity:.9;}
+
+/* LAYOUT */
+.main{padding:16px;max-width:900px;margin:0 auto;}
+.section-gap{margin-top:20px;}
+.section-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--dim);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:2px;}
+
+/* LEGEND */
+.legend{display:flex;gap:16px;flex-wrap:wrap;padding:10px 0 14px;}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+
+/* TABLE */
+.panel{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.rt{width:100%;border-collapse:collapse;}
+.rt th{background:var(--panel);color:var(--dim);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:9px 14px;text-align:left;border-bottom:2px solid var(--border);}
+.rt td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:top;}
+.rt tr:last-child td{border-bottom:none;}
+.rt tr:hover td{background:rgba(255,255,255,0.02);}
+.rt td.code{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;}
+.rt td.desc{color:#fff;}
+.rt td.poet{color:var(--muted);font-size:12px;}
+
+/* classification badges */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px;white-space:nowrap;}
+.cap{background:rgba(74,179,232,0.15);color:var(--c-capital);}
+.om{background:rgba(72,201,142,0.15);color:var(--c-om);}
+.ret{background:rgba(255,95,95,0.15);color:var(--c-ret);}
+
+/* starred note */
+.star-note{background:rgba(255,208,75,0.06);border:1px solid rgba(255,208,75,0.15);border-radius:var(--radius);padding:10px 14px;margin-top:14px;font-size:12px;color:var(--muted);line-height:1.6;}
+.star-note strong{color:var(--c-common);}
+
+/* context table accent */
+.ctx-row td{background:rgba(255,208,75,0.03);}
+.ctx-row:hover td{background:rgba(255,208,75,0.06)!important;}
+
+/* updated badge */
+.updated{font-size:11px;color:var(--dim);font-style:italic;text-align:right;padding-top:10px;}
+
+@media(max-width:600px){
+  .main{padding:10px;}
+  .rt th,.rt td{padding:8px 10px;}
+  .rt th:nth-child(3){display:none;}
+  .rt td:nth-child(3){display:none;}
+}
+@media(min-width:900px){.main{padding:16px 24px;}}
+</style>
+</head>
+<body>
+
+<nav class="sitenav">
+  <a href="index.html">&#9874; Item Search</a>
+  <div class="nav-divider"></div>
+  <a href="quick-reference.html">&#128203; Quick Reference</a>
+  <div class="nav-divider"></div>
+  <a href="gas-symbols.html">&#128506; Gas Symbols</a>
+  <div class="nav-divider"></div>
+  <a href="charging-guide.html" class="active">&#128176; Charging Guide</a>
+</nav>
+
+<header class="header">
+  <div class="logo">XCMG</div>
+  <div class="header-title">How to Charge Items to the Correct POET</div>
+</header>
+
+<div class="main">
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--c-capital)"></div>Capital</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--c-om)"></div>O&amp;M</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--c-ret)"></div>Retirement</div>
+  </div>
+
+  <!-- MAIN TABLE -->
+  <div class="panel">
+    <table class="rt">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Description</th>
+          <th>POET Description</th>
+          <th>Classification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="code">G-7</td>
+          <td class="desc">Curb Valve</td>
+          <td class="poet">Replace Service Valves</td>
+          <td><span class="badge om">O&amp;M</span></td>
+        </tr>
+        <tr>
+          <td class="code">*G-13</td>
+          <td class="desc">Install New Meter Set</td>
+          <td class="poet">See Note Below &#9660;</td>
+          <td><span class="badge cap">Capital</span></td>
+        </tr>
+        <tr>
+          <td class="code">*G-18</td>
+          <td class="desc">Bypass (Service / Main)</td>
+          <td class="poet">Replace Bypasses</td>
+          <td><span class="badge om">O&amp;M</span></td>
+        </tr>
+        <tr>
+          <td class="code">*G20</td>
+          <td class="desc">Additional House Pipe in Excess of 6 ft</td>
+          <td class="poet">See Note Below &#9660;</td>
+          <td><span class="badge cap">Capital</span></td>
+        </tr>
+        <tr>
+          <td class="code">*G20a</td>
+          <td class="desc">Relocate Meter Set (up to three)</td>
+          <td class="poet">See Note Below &#9660;</td>
+          <td><span class="badge om">O&amp;M</span></td>
+        </tr>
+        <tr>
+          <td class="code">GT-10</td>
+          <td class="desc">Cut and Cap Service / Main — No Excavation</td>
+          <td class="poet">Retirement CI/WI &nbsp;|&nbsp; Retirement ST &nbsp;|&nbsp; Retirement PE</td>
+          <td><span class="badge ret">Retirement</span></td>
+        </tr>
+        <tr>
+          <td class="code">GT-31</td>
+          <td class="desc">Service Transfer</td>
+          <td class="poet">Maintain Non Gas Leak / Replace Service Transfers</td>
+          <td><span class="badge om">O&amp;M</span></td>
+        </tr>
+        <tr>
+          <td class="code">GT-61</td>
+          <td class="desc">Countersink Road Plates</td>
+          <td class="poet">Main Account</td>
+          <td><span class="badge cap">Capital</span></td>
+        </tr>
+        <tr>
+          <td class="code">T2R</td>
+          <td class="desc">Asphalt / Binder Removal &amp; Restoration</td>
+          <td class="poet">Main Account</td>
+          <td><span class="badge cap">Capital</span></td>
+        </tr>
+        <tr>
+          <td class="code">T7R</td>
+          <td class="desc">Break / Remove / Restore Concrete Driveway &amp; Sidewalk</td>
+          <td class="poet">Replace Service Valves</td>
+          <td><span class="badge om">O&amp;M</span></td>
+        </tr>
+        <tr>
+          <td class="code">*T43</td>
+          <td class="desc">Earth Excavation &amp; Backfill by Machine and Hand</td>
+          <td class="poet">Main Account</td>
+          <td><span class="badge cap">Capital</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- STARRED CONTEXT NOTE -->
+  <div class="star-note">
+    <strong>★ Starred items (*) have multiple POET codes depending on context — see table below</strong>
+  </div>
+
+  <!-- CONTEXT TABLE -->
+  <div class="section-gap">
+    <div class="section-label">Context-Specific POET — Starred Items</div>
+    <div class="panel">
+      <table class="rt">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>When / Context</th>
+            <th>POET Description</th>
+            <th>Classification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ctx-row">
+            <td class="code">G-13</td>
+            <td class="desc">When used along with an Insert or Direct Bury Service</td>
+            <td class="poet">Install Insert or Direct Bury Service</td>
+            <td><span class="badge cap">Capital</span></td>
+          </tr>
+          <tr class="ctx-row">
+            <td class="code">G-18</td>
+            <td class="desc">When used related to a main or service</td>
+            <td class="poet">Replace Bypasses</td>
+            <td><span class="badge om">O&amp;M</span></td>
+          </tr>
+          <tr class="ctx-row">
+            <td class="code">G20</td>
+            <td class="desc">When used along with a service transfer</td>
+            <td class="poet">Install Insert or Direct Bury Service</td>
+            <td><span class="badge cap">Capital</span></td>
+          </tr>
+          <tr class="ctx-row">
+            <td class="code">G20</td>
+            <td class="desc">When used along with an Insert or Direct Bury Service</td>
+            <td class="poet">Install Insert or Direct Bury Service</td>
+            <td><span class="badge cap">Capital</span></td>
+          </tr>
+          <tr class="ctx-row">
+            <td class="code">G20a</td>
+            <td class="desc">When used along with an Insert or Direct Bury Service</td>
+            <td class="poet">Install Insert or Direct Bury Service</td>
+            <td><span class="badge cap">Capital</span></td>
+          </tr>
+          <tr class="ctx-row">
+            <td class="code">T43</td>
+            <td class="desc">When used in the curb valve pit</td>
+            <td class="poet">Replace Service Valves</td>
+            <td><span class="badge om">O&amp;M</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="updated">POET Cheatsheet — Updated 4.13.26 GH</div>
+
+</div>
+</body>
+</html>
